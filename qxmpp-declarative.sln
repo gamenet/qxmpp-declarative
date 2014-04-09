@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qxmpp-declarative", "qxmpp-declarative\qxmpp-declarative.vcxproj", "{1E2097B0-52DC-4F2C-9783-67DF96BBA73A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Application", "Application\Application.vcxproj", "{0DB6AAA5-A169-473E-A1F0-3ECC1C519B62}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E2097B0-52DC-4F2C-9783-67DF96BBA73A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1E2097B0-52DC-4F2C-9783-67DF96BBA73A}.Debug|Win32.Build.0 = Debug|Win32
+		{1E2097B0-52DC-4F2C-9783-67DF96BBA73A}.Release|Win32.ActiveCfg = Release|Win32
+		{1E2097B0-52DC-4F2C-9783-67DF96BBA73A}.Release|Win32.Build.0 = Release|Win32
+		{0DB6AAA5-A169-473E-A1F0-3ECC1C519B62}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0DB6AAA5-A169-473E-A1F0-3ECC1C519B62}.Debug|Win32.Build.0 = Debug|Win32
+		{0DB6AAA5-A169-473E-A1F0-3ECC1C519B62}.Release|Win32.ActiveCfg = Release|Win32
+		{0DB6AAA5-A169-473E-A1F0-3ECC1C519B62}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
