@@ -24,28 +24,83 @@
 #include <QmlQXmppPresence.h>
 
 QmlQXmppPresence::QmlQXmppPresence(const QXmppPresence &xmppPresence, QObject *parent)
-  : QXmppPresence(xmppPresence)
+  : _presence(xmppPresence)
   , QObject(parent)
 {
-
 }
 
 QmlQXmppPresence::~QmlQXmppPresence()
 {
 }
 
-QmlQXmppPresence& QmlQXmppPresence::operator=(const QXmppPresence &msg)
+QString QmlQXmppPresence::from() const
 {
-  this->_presence = msg;
-  return *this;
+  return _presence.from();
 }
 
-QmlQXmppPresence::StatusType QmlQXmppPresence::type() const
+QString QmlQXmppPresence::type() const
 {
-  return StatusType(availableStatusType());
+  if (QXmppPresence::Available == _presence.type()) {
+    return statusToString(_presence.availableStatusType());
+  } else {
+    return "offline";
+  }
 }
-//
-//QString QmlQXmppPresence::status() const
-//{
-//  return statusText()
-//}
+
+void QmlQXmppPresence::setType(const QString& value)
+{
+  if ("offline" == value) {
+    _presence.setType(QXmppPresence::Unavailable);
+  } else {
+    _presence.setAvailableStatusType(stringToStatus(value));
+  }
+}
+
+QString QmlQXmppPresence::statusText() const
+{
+  return _presence.statusText();
+}
+
+void QmlQXmppPresence::setStatusText(const QString &value)
+{
+  _presence.setStatusText(value);
+}
+
+QString QmlQXmppPresence::statusToString(QXmppPresence::AvailableStatusType value)
+{
+  QString result;
+  switch (value) {
+  case QXmppPresence::Online:
+    result = "online";
+    break;
+  case QXmppPresence::Away:
+    result = "away";
+    break;
+  case QXmppPresence::XA:
+    result = "xa";
+    break;
+  case QXmppPresence::DND:
+    result = "dnd";
+    break;
+  case QXmppPresence::Chat:
+    result = "chat";
+    break;
+  }
+  return result;
+}
+
+QXmppPresence::AvailableStatusType QmlQXmppPresence::stringToStatus(const QString& value)
+{
+  if (value == "online") {
+    return QXmppPresence::Online;
+  } else if (value == "away") {
+    return QXmppPresence::Away;
+  } else if (value == "xa") {
+    return QXmppPresence::XA;
+  } else if (value == "dnd") {
+    return QXmppPresence::DND;
+  } else if (value == "chat") {
+    return QXmppPresence::Chat;
+  }
+  return QXmppPresence::Online;
+}

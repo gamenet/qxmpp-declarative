@@ -131,7 +131,7 @@ Rectangle {
                 Button {
                     id: subscribeButton
 
-                    width: 60
+                    width: 90
                     height: 25
                     text: "Sub"
                     onClicked: {
@@ -142,18 +142,10 @@ Rectangle {
                 Button {
                     id: unsubscribeButton
 
-                    width: 60
+                    width: 90
                     height: 25
                     text: "Unsub"
-                    onClicked: {}
-                }
-                Button {
-                    id: requestSub
-
-                    width: 65
-                    height: 25
-                    text: "Request"
-                    onClicked: {}
+                    onClicked: root.rosterManager.unsubscribe(jid);
                 }
             }
 

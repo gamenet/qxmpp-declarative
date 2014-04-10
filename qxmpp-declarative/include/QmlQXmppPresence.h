@@ -26,31 +26,28 @@
 #include <QtCore/QObject>
 #include <QXmppPresence.h>
 
-class QmlQXmppPresence : public QObject, public QXmppPresence
+class QmlQXmppPresence : public QObject
 {
   Q_OBJECT
-  Q_ENUMS(StatusType)
-  Q_PROPERTY(StatusType type READ type);
-  Q_PROPERTY(QString status READ statusText);
+  Q_PROPERTY(QString from READ from);
+  Q_PROPERTY(QString type READ type WRITE setType);
+  Q_PROPERTY(QString status READ statusText WRITE setStatusText);
 
 public:
-  enum StatusType {
-    Online = QXmppPresence::Online,
-    Away = QXmppPresence::Away,
-    XA = QXmppPresence::XA,
-    DND = QXmppPresence::DND,
-    Chat = QXmppPresence::Chat,
-    Invisible = QXmppPresence::Invisible
-  };
-
-  //QmlQXmppPresence(QObject *parent = 0);
   QmlQXmppPresence(const QXmppPresence &xmppPresence, QObject *parent = 0);
   ~QmlQXmppPresence();
 
-  QmlQXmppPresence& operator=(const QXmppPresence &msg);
+  QString from() const;
 
-  QmlQXmppPresence::StatusType type() const;
-  //QString status() const;
+  QString type() const;
+  void setType(const QString &value);
+
+  QString statusText() const;
+  void setStatusText(const QString &value);
+
+  static QString statusToString(QXmppPresence::AvailableStatusType type);
+  static QXmppPresence::AvailableStatusType stringToStatus(const QString& str);
+
 private:
   QXmppPresence _presence;
 };

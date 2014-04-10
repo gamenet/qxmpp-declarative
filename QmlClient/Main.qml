@@ -36,6 +36,9 @@ Rectangle {
             subscriptionBlock.jid = from;
             onlineGui.state = "SubscriptionRequest";
         }
+        onMessageReceived: {
+            contactList.setNewMessages(from, true);
+        }
     }
 
     QtObject {
@@ -102,6 +105,9 @@ Rectangle {
                         if (d.currentJid != "") {
                             onlineGui.state = "ViewingVCard";
                         }
+                    }
+                    onChangeStatus: {
+                        xmppClient.statusType = status;
                     }
                 }
 

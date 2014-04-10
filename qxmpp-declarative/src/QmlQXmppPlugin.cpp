@@ -26,8 +26,9 @@
 #include <QtDeclarative/QDeclarative.h>
 #include <QtDeclarative/QDeclarativeEngine>
 
+#include <QXmppLogger.h>
+
 #include <QmlQXmppPlugin.h>
-//#include <QmlQXmppMessage.h>
 #include <QmlQXmppPresence.h>
 #include <QmlQXmppClient.h>
 #include <QmlQXmppArchiveManager.h>
@@ -37,13 +38,13 @@
 
 void QmlQXmppPlugin::registerTypes(const char *uri)
 {
-  //qmlRegisterUncreatableType<QmlQXmppMessage>("QXmpp", 1, 0, "QXmppMessage", "Do not create QXmppMessage instances.");
   qmlRegisterUncreatableType<QmlQXmppPresence>("QXmpp", 1, 0, "QXmppPresence", "Do not create QXmppPresence instances.");
   qmlRegisterType<QmlQXmppClient>("QXmpp", 1, 0, "QXmppClient");
   qmlRegisterUncreatableType<QmlQXmppArchiveManager>("QXmpp", 1, 0, "QXmppArchiveManager", "Do not create QXmppArchiveManager instances.");
   qmlRegisterUncreatableType<QmlQXmppRosterManager>("QXmpp", 1, 0, "QXmppRosterManager", "Do not create QXmppRosterManager instances.");
   qmlRegisterUncreatableType<QmlQXmppVCardManager>("QXmpp", 1, 0, "QXmppVCardManager", "Do not create QmlQXmppVCardManager instances.");
   qmlRegisterType<QmlQXmppVCard>("QXmpp", 1, 0, "QXmppVCard");
+  qmlRegisterType<QXmppLogger>("QXmpp", 1, 0, "QXmppLogger");
 }
 
 void QmlQXmppPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)

@@ -9,7 +9,7 @@ import "../scripts/AvatarProvider.js" as AvatarProvider
 Column {
     id: root
 
-    property string current
+    property string current: extendedModel.model().get(d.currentContact).jid || ""
 
     signal contactClicked(string jid)
     signal contactDoubleClicked(string jid)
@@ -42,7 +42,7 @@ Column {
     }
 
     function setStatusType(bareJid, type) {
-        extendedModel.setPropertyById(bareJid, "status", Utility.presenceToString(type));
+        extendedModel.setPropertyById(bareJid, "status", type);
     }
 
     function statusType(bareJid) {
@@ -63,6 +63,10 @@ Column {
             return item.statusText || "";
         }
         return "";
+    }
+
+    function setNewMessages(bareJid, hasNewMsg) {
+        extendedModel.setPropertyById(bareJid, "hasNewMessages", text);
     }
 
     spacing: 10
@@ -98,7 +102,6 @@ Column {
                 var index = listView.indexAt(mouseX, mouseY);
                 if (index >= 0) {
                     d.currentContact = index;
-                    root.current = extendedModel.model().get(index).jid;
                     root.contactClicked(root.current);
                 }
             }
@@ -108,7 +111,7 @@ Column {
                 var index = listView.indexAt(mouseX, mouseY);
                 if (index >= 0) {
                     d.currentContact = index;
-                    root.current = extendedModel.model().get(index).jid;
+                    root.setNewMessages(root.current, false);
                     root.contactDoubleClicked(root.current);
                 }
             }

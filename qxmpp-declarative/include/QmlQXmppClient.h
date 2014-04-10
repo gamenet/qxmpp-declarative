@@ -37,10 +37,13 @@ class QXmppArchiveManager;
 
 class QmlQXmppClient : public QObject
 {
-Q_OBJECT
+  Q_OBJECT
    Q_PROPERTY(QmlQXmppArchiveManager* archiveManager READ archiveManager CONSTANT)
    Q_PROPERTY(QmlQXmppRosterManager* rosterManager READ rosterManager CONSTANT)
    Q_PROPERTY(QmlQXmppVCardManager* vcardManager READ vcardManager CONSTANT)
+
+   Q_PROPERTY(QString statusType READ clientStatusType WRITE setClientStatusType NOTIFY statusTypeChanged)
+   Q_PROPERTY(QString statusText READ clientStatusText WRITE setClientStatusText NOTIFY statusTextChanged)
 
 public:
     QmlQXmppClient(QObject *parent = 0);
@@ -49,6 +52,12 @@ public:
     QmlQXmppArchiveManager *archiveManager();
     QmlQXmppRosterManager *rosterManager();
     QmlQXmppVCardManager* vcardManager();
+
+    QString clientStatusType();
+    void setClientStatusType(const QString &value);
+
+    QString clientStatusText();
+    void setClientStatusText(const QString &value);
 
 signals:
     /// This signal is emitted when the client connects successfully to the XMPP
@@ -81,27 +90,22 @@ signals:
     /// know the error.
     void error(QXmppClient::Error);
 
-    /// This signal is emitted when the logger changes.
-    //void loggerChanged(QXmppLogger *logger);
-    //void messageReceived(QmlQXmppMessage *message);
     void messageReceived(QString from, QString message);
         
+    //  This signal is emitted when client presence type changes.
     void presenceReceived(QmlQXmppPresence *presence);
 
-    /// Notifies that an XMPP iq stanza is received. The QXmppIq
-    /// parameter contains the details of the iq sent to this client.
-    /// IQ stanzas provide a structured request-response mechanism. Roster
-    /// management, setting-getting vCards etc is done using iq stanzas.
-    //void iqReceived(const QXmppIq &iq);
+    //  This signal is emitted when client status type changes.
+    void statusTypeChanged(const QString &type);
 
-    /// This signal is emitted when the client state changes.
-    //void stateChanged(QXmppClient::State state);
+    //  This signal is emitted when client status text changes.
+    void statusTextChanged(const QString &text);
 
 public slots:
     void connectToServer(const QString &jid, const QString &password);
     void disconnectFromServer();
-      //bool sendPacket(const QXmppStanza&);
     void sendMessage(const QString& bareJid, const QString& message);
+
 
 private slots:
     void onMessageReceived(const QXmppMessage& message);
@@ -114,6 +118,7 @@ private:
   QXmppClient *_client;
   QXmppArchiveManager *_archiveManager;
 
+  QmlQXmppPresence *_clientPresence;
    QmlQXmppArchiveManager *_archiveManagerWrapper;
    QmlQXmppRosterManager *_rosterManagerWrapper;
    QmlQXmppVCardManager* _vcardManagerWrapper;

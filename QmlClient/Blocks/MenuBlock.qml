@@ -8,6 +8,7 @@ Item {
     signal editContact()
     signal removeContact()
     signal viewVCard()
+    signal changeStatus(string status)
 
     Row {
         width: parent.width
@@ -37,6 +38,24 @@ Item {
             height: 20
             image: "../images/Buttons/remove.png"
             onClicked: root.removeContact();
+        }
+
+        Rectangle {
+            width: 50
+            height: 1
+            color: "#00FFFFFF"
+        }
+        IconButton {
+            width: 20
+            height: 20
+            image: "../images/StatusIcon/online.png"
+            onClicked: root.changeStatus("online");
+        }
+        IconButton {
+            width: 20
+            height: 20
+            image: "../images/StatusIcon/dnd.png"
+            onClicked: root.changeStatus("dnd");
         }
     }
 }

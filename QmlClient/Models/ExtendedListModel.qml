@@ -121,7 +121,7 @@ Item {
     }
 
     function setPropertyById(id, name, value) {
-        console.log("setPropertyById for id == " + id + ", property: " + name + ", value: " + value);
+        //console.log("setPropertyById for id == " + id + ", property: " + name + ", value: " + value);
 
         var index;
         if (!Js.idToIndex.hasOwnProperty(id)) {
@@ -130,14 +130,10 @@ Item {
 
         index = Js.idToIndex[id];
 
-
-
         var obj = listModel.get(index);
-        console.log("current: " + obj[name])
 
         listModel.setProperty(index, name, value);
         obj = listModel.get(index);
-        console.log("after: " + obj[name])
     }
 
     QtObject {

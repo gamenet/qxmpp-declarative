@@ -15,7 +15,6 @@ Item {
 
             width: 100
             height: 25
-            anchors.verticalCenter: parent.verticalCenter
             style: Text.Normal
             smooth: true
             font { family: "Arial"; pixelSize: 16 }
@@ -24,8 +23,7 @@ Item {
 
         Rectangle {
             width: root.width - 105
-            height: 25
-            anchors.verticalCenter: parent.verticalCenter
+            height: root.height
 
             TextInput {
                 id: valueField
