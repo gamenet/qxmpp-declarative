@@ -1,22 +1,13 @@
-#include <QtGui/QApplication>
-#define _CRTDBG_MAP_ALLOC
+#include <QtWidgets/QApplication>
 #include <QtDeclarative/QDeclarativeView>
 #include <QtDeclarative/QDeclarativeEngine>
 
-
-#include <stdlib.h>
-#include <crtdbg.h>
-
 int main(int argc, char *argv[])
 {
-  _CrtDumpMemoryLeaks();
-  _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
-
   QApplication app(argc, argv);
 
   QDeclarativeView view;
   view.setResizeMode(QDeclarativeView::SizeRootObjectToView);
-  view.setAttribute(Qt::WA_LockLandscapeOrientation, true);
   
   QString errStr;
 
@@ -33,4 +24,3 @@ int main(int argc, char *argv[])
 
   return app.exec();
 }
-

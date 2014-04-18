@@ -1,0 +1,261 @@
+import QtQuick.tooling 1.1
+
+// This file describes the plugin-supplied types contained in the library.
+// It is used for QML tooling purposes only.
+//
+// This file was auto-generated with the command 'D:\SDK.cpp\Qt5.2.1_VS2010\5.2.1\msvc2010\bin\qml1plugindump.EXE -path ./'.
+
+Module {
+    Component {
+        name: "QXmppLogger"
+        prototype: "QObject"
+        exports: ["QXmpp/QXmppLogger 1.0"]
+        exportMetaObjectRevisions: [0]
+        Enum {
+            name: "LoggingType"
+            values: {
+                "NoLogging": 0,
+                "FileLogging": 1,
+                "StdoutLogging": 2,
+                "SignalLogging": 4
+            }
+        }
+        Enum {
+            name: "MessageType"
+            values: {
+                "NoMessage": 0,
+                "DebugMessage": 1,
+                "InformationMessage": 2,
+                "WarningMessage": 4,
+                "ReceivedMessage": 8,
+                "SentMessage": 16,
+                "AnyMessage": 31
+            }
+        }
+        Enum {
+            name: "MessageTypes"
+            values: {
+                "NoMessage": 0,
+                "DebugMessage": 1,
+                "InformationMessage": 2,
+                "WarningMessage": 4,
+                "ReceivedMessage": 8,
+                "SentMessage": 16,
+                "AnyMessage": 31
+            }
+        }
+        Property { name: "logFilePath"; type: "string" }
+        Property { name: "loggingType"; type: "LoggingType" }
+        Property { name: "messageTypes"; type: "MessageTypes" }
+        Method {
+            name: "setGauge"
+            Parameter { name: "gauge"; type: "string" }
+            Parameter { name: "value"; type: "double" }
+        }
+        Method {
+            name: "updateCounter"
+            Parameter { name: "counter"; type: "string" }
+            Parameter { name: "amount"; type: "qlonglong" }
+        }
+        Method {
+            name: "log"
+            Parameter { name: "type"; type: "QXmppLogger::MessageType" }
+            Parameter { name: "text"; type: "string" }
+        }
+        Method { name: "reopen" }
+    }
+    Component {
+        name: "QmlQXmppArchiveManager"
+        prototype: "QObject"
+        exports: ["QXmpp/QXmppArchiveManager 1.0"]
+        exportMetaObjectRevisions: [0]
+    }
+    Component {
+        name: "QmlQXmppClient"
+        prototype: "QObject"
+        exports: ["QXmpp/QXmppClient 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property {
+            name: "archiveManager"
+            type: "QmlQXmppArchiveManager"
+            isReadonly: true
+            isPointer: true
+        }
+        Property {
+            name: "rosterManager"
+            type: "QmlQXmppRosterManager"
+            isReadonly: true
+            isPointer: true
+        }
+        Property { name: "vcardManager"; type: "QmlQXmppVCardManager"; isReadonly: true; isPointer: true }
+        Property { name: "statusType"; type: "string" }
+        Property { name: "statusText"; type: "string" }
+        Method {
+            name: "connectToServer"
+            Parameter { name: "jid"; type: "string" }
+            Parameter { name: "password"; type: "string" }
+        }
+        Method { name: "disconnectFromServer" }
+        Method {
+            name: "sendMessage"
+            Parameter { name: "bareJid"; type: "string" }
+            Parameter { name: "message"; type: "string" }
+        }
+    }
+    Component {
+        name: "QmlQXmppPresence"
+        prototype: "QObject"
+        exports: ["QXmpp/QXmppPresence 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "from"; type: "string"; isReadonly: true }
+        Property { name: "type"; type: "string" }
+        Property { name: "status"; type: "string" }
+    }
+    Component {
+        name: "QmlQXmppRosterManager"
+        prototype: "QObject"
+        exports: ["QXmpp/QXmppRosterManager 1.0"]
+        exportMetaObjectRevisions: [0]
+        Enum {
+            name: "SubscriptionType"
+            values: {
+                "None": 0,
+                "From": 1,
+                "To": 2,
+                "Both": 3
+            }
+        }
+        Method {
+            name: "acceptSubscription"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+            Parameter { name: "reason"; type: "string" }
+        }
+        Method {
+            name: "acceptSubscription"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+        }
+        Method {
+            name: "refuseSubscription"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+            Parameter { name: "reason"; type: "string" }
+        }
+        Method {
+            name: "refuseSubscription"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+        }
+        Method {
+            name: "subscribe"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+            Parameter { name: "reason"; type: "string" }
+        }
+        Method {
+            name: "subscribe"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+        }
+        Method {
+            name: "unsubscribe"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+            Parameter { name: "reason"; type: "string" }
+        }
+        Method {
+            name: "unsubscribe"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+        }
+        Method {
+            name: "addItem"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+            Parameter { name: "name"; type: "string" }
+            Parameter { name: "groups"; type: "QStringList" }
+        }
+        Method {
+            name: "addItem"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+            Parameter { name: "name"; type: "string" }
+        }
+        Method {
+            name: "addItem"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+        }
+        Method {
+            name: "removeItem"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+        }
+        Method {
+            name: "renameItem"
+            type: "bool"
+            Parameter { name: "bareJid"; type: "string" }
+            Parameter { name: "name"; type: "string" }
+        }
+        Method {
+            name: "setNickname"
+            Parameter { name: "bareJid"; type: "string" }
+            Parameter { name: "name"; type: "string" }
+        }
+        Method {
+            name: "setGroups"
+            Parameter { name: "bareJid"; type: "string" }
+            Parameter { name: "groups"; type: "QStringList" }
+        }
+        Method { name: "getRosterBareJids"; type: "QStringList" }
+        Method {
+            name: "getPresence"
+            type: "QmlQXmppPresence*"
+            Parameter { name: "bareJid"; type: "string" }
+            Parameter { name: "resource"; type: "string" }
+        }
+        Method {
+            name: "getNickname"
+            type: "string"
+            Parameter { name: "bareJid"; type: "string" }
+        }
+        Method {
+            name: "getSubscription"
+            type: "int"
+            Parameter { name: "bareJid"; type: "string" }
+        }
+        Method {
+            name: "getGroups"
+            type: "QStringList"
+            Parameter { name: "bareJid"; type: "string" }
+        }
+    }
+    Component {
+        name: "QmlQXmppVCard"
+        prototype: "QObject"
+        exports: ["QXmpp/QXmppVCard 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "from"; type: "string"; isReadonly: true }
+        Property { name: "birthday"; type: "QDate"; isReadonly: true }
+        Property { name: "description"; type: "string"; isReadonly: true }
+        Property { name: "email"; type: "string"; isReadonly: true }
+        Property { name: "firstName"; type: "string"; isReadonly: true }
+        Property { name: "fullName"; type: "string"; isReadonly: true }
+        Property { name: "lastName"; type: "string"; isReadonly: true }
+        Property { name: "middleName"; type: "string"; isReadonly: true }
+        Property { name: "nickName"; type: "string"; isReadonly: true }
+        Property { name: "url"; type: "string"; isReadonly: true }
+    }
+    Component {
+        name: "QmlQXmppVCardManager"
+        prototype: "QObject"
+        exports: ["QXmpp/QXmppVCardManager 1.0"]
+        exportMetaObjectRevisions: [0]
+        Method {
+            name: "requestVCard"
+            Parameter { name: "jid"; type: "string" }
+        }
+    }
+    Component { name: "QEasingCurve"; prototype: "QDeclarativeEasingValueType" }
+}

@@ -1,25 +1,27 @@
 /*
- * Copyright (C) 2014 qxmpp-declarative developers
- *
- * Author:
- *  Nikita Gorbunov
- *
- * Source:
- *  https://github.com/n-gorbunov/qxmpp-declarative
- *
- * This file is a part of qxmpp-declarative library.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 GameNet
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *  
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
+
 #include <QtDeclarative/QDeclarativeEngine>
 
 #include <QXmppMessage.h>
@@ -47,21 +49,17 @@ QmlQXmppClient::QmlQXmppClient(QObject *parent)
 
 QmlQXmppClient::~QmlQXmppClient()
 {
-  if (_rosterManagerWrapper)
-    delete _rosterManagerWrapper;
-  if (_vcardManagerWrapper)
-    delete _vcardManagerWrapper;
 }
 //
 QmlQXmppArchiveManager *QmlQXmppClient::archiveManager()
 {
-  if (!_archiveManager) {
-    _archiveManager = new QXmppArchiveManager;
-    _client->addExtension(_archiveManager);
+  if (!this->_archiveManager) {
+    this->_archiveManager = new QXmppArchiveManager;
+    this->_client->addExtension(this->_archiveManager);
   }
 
-  //if (!_archiveManagerWrapper)
-  //  _archiveManagerWrapper = new QmlQXmppArchiveManager(&_client->arcManager());
+  //if (!this->_archiveManagerWrapper)
+  //  this->_archiveManagerWrapper = new QmlQXmppArchiveManager(&this->_client->arcManager(), this);
 
   return _archiveManagerWrapper;
 }
@@ -69,24 +67,24 @@ QmlQXmppArchiveManager *QmlQXmppClient::archiveManager()
 //
 QmlQXmppRosterManager *QmlQXmppClient::rosterManager()
 {
-  if (!_rosterManagerWrapper)
-    _rosterManagerWrapper = new QmlQXmppRosterManager(&_client->rosterManager());
+  if (!this->_rosterManagerWrapper)
+    this->_rosterManagerWrapper = new QmlQXmppRosterManager(&this->_client->rosterManager(), this);
 
-  return _rosterManagerWrapper;
+  return this->_rosterManagerWrapper;
 }
 
 QmlQXmppVCardManager *QmlQXmppClient::vcardManager()
 {
-  if (!_vcardManagerWrapper)
-    _vcardManagerWrapper = new QmlQXmppVCardManager(&_client->vCardManager());
+  if (!this->_vcardManagerWrapper)
+    this->_vcardManagerWrapper = new QmlQXmppVCardManager(&this->_client->vCardManager(), this);
  
-  return _vcardManagerWrapper;
+  return this->_vcardManagerWrapper;
 }
 
 QString QmlQXmppClient::clientStatusType()
 {
-  if (_client->clientPresence().type() == QXmppPresence::Available) {
-    return QmlQXmppPresence::statusToString(_client->clientPresence().availableStatusType());
+  if (this->_client->clientPresence().type() == QXmppPresence::Available) {
+    return QmlQXmppPresence::statusToString(this->_client->clientPresence().availableStatusType());
   } else {
     return "offline";
   }
@@ -95,14 +93,14 @@ QString QmlQXmppClient::clientStatusType()
 void QmlQXmppClient::setClientStatusType(const QString &value)
 {
   if (value != this->clientStatusType()) {
-    QXmppPresence presence = _client->clientPresence();
+    QXmppPresence presence = this->_client->clientPresence();
     if (value == "offline") {
       presence.setType(QXmppPresence::Unavailable);
     } else {
       presence.setType(QXmppPresence::Available);
       presence.setAvailableStatusType(QmlQXmppPresence::stringToStatus(value));
     }
-    _client->setClientPresence(presence);
+    this->_client->setClientPresence(presence);
 
     emit statusTypeChanged(value);
   }
@@ -110,15 +108,15 @@ void QmlQXmppClient::setClientStatusType(const QString &value)
 
 QString QmlQXmppClient::clientStatusText()
 {
-  return _client->clientPresence().statusText();
+  return this->_client->clientPresence().statusText();
 }
 
 void QmlQXmppClient::setClientStatusText(const QString &value)
 {
   if (value != this->clientStatusText()) {
-    QXmppPresence presence = _client->clientPresence();
+    QXmppPresence presence = this->_client->clientPresence();
     presence.setStatusText(value);
-    _client->setClientPresence(presence);
+    this->_client->setClientPresence(presence);
 
     emit statusTextChanged(value);
   }
@@ -126,23 +124,23 @@ void QmlQXmppClient::setClientStatusText(const QString &value)
 
 void QmlQXmppClient::connectToServer(const QString &jid, const QString &password)
 {
- Q_ASSERT(_client);
+ Q_ASSERT(this->_client);
 
- _client->connectToServer(jid, password);
+ this->_client->connectToServer(jid, password);
 }
 
 void QmlQXmppClient::disconnectFromServer()
 {
- Q_ASSERT(_client);
+ Q_ASSERT(this->_client);
 
- _client->disconnectFromServer();
+ this->_client->disconnectFromServer();
 }
 
 void QmlQXmppClient::sendMessage(const QString& bareJid, const QString& message)
 {
- Q_ASSERT(_client);
+ Q_ASSERT(this->_client);
 
- _client->sendMessage(bareJid, message);
+ this->_client->sendMessage(bareJid, message);
 }
 
 void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
@@ -158,11 +156,11 @@ void QmlQXmppClient::onPresenceReceived(const QXmppPresence &presence)
 
 void QmlQXmppClient::connectSignals()
 {
-  Q_ASSERT(_client);
+  Q_ASSERT(this->_client);
 
-  SIGNAL_CONNECT_CHECK(connect(_client, SIGNAL(error(QXmppClient::Error)), this, SIGNAL(error(QXmppClient::Error))));
-  SIGNAL_CONNECT_CHECK(connect(_client, SIGNAL(connected()), this, SIGNAL(connected())));
-  SIGNAL_CONNECT_CHECK(connect(_client, SIGNAL(disconnected()), this, SIGNAL(disconnected())));
-  SIGNAL_CONNECT_CHECK(connect(_client, SIGNAL(messageReceived(const QXmppMessage &)), this, SLOT(onMessageReceived(const QXmppMessage &))));
-  SIGNAL_CONNECT_CHECK(connect(_client, SIGNAL(presenceReceived(const QXmppPresence &)), this, SLOT(onPresenceReceived(const QXmppPresence &))));
+  SIGNAL_CONNECT_CHECK(connect(this->_client, SIGNAL(error(QXmppClient::Error)), this, SIGNAL(error(QXmppClient::Error))));
+  SIGNAL_CONNECT_CHECK(connect(this->_client, SIGNAL(connected()), this, SIGNAL(connected())));
+  SIGNAL_CONNECT_CHECK(connect(this->_client, SIGNAL(disconnected()), this, SIGNAL(disconnected())));
+  SIGNAL_CONNECT_CHECK(connect(this->_client, SIGNAL(messageReceived(const QXmppMessage &)), this, SLOT(onMessageReceived(const QXmppMessage &))));
+  SIGNAL_CONNECT_CHECK(connect(this->_client, SIGNAL(presenceReceived(const QXmppPresence &)), this, SLOT(onPresenceReceived(const QXmppPresence &))));
 }
