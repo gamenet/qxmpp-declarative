@@ -30,6 +30,7 @@
 
 class QmlQXmppMessage;
 class QmlQXmppPresence;
+class QmlQXmppConfiguration;
 class QmlQXmppArchiveManager;
 class QmlQXmppRosterManager;
 class QmlQXmppVCardManager;
@@ -39,6 +40,7 @@ class QXmppArchiveManager;
 class QmlQXmppClient : public QObject
 {
   Q_OBJECT
+  Q_PROPERTY(QmlQXmppConfiguration *configuration READ configuration CONSTANT)
   Q_PROPERTY(QmlQXmppArchiveManager* archiveManager READ archiveManager CONSTANT)
   Q_PROPERTY(QmlQXmppRosterManager* rosterManager READ rosterManager CONSTANT)
   Q_PROPERTY(QmlQXmppVCardManager* vcardManager READ vcardManager CONSTANT)
@@ -49,6 +51,7 @@ public:
   QmlQXmppClient(QObject *parent = 0);
   ~QmlQXmppClient();
 
+  QmlQXmppConfiguration *configuration();
   QmlQXmppArchiveManager *archiveManager();
   QmlQXmppRosterManager *rosterManager();
   QmlQXmppVCardManager* vcardManager();
@@ -102,6 +105,8 @@ signals:
   void statusTextChanged(const QString &text);
 
 public slots:
+  //  connect using QXmppConfiguration params
+  void connectUsingConfiguration();
   void connectToServer(const QString &jid, const QString &password);
   void disconnectFromServer();
   void sendMessage(const QString& bareJid, const QString& message);
@@ -114,10 +119,12 @@ private:
   void connectSignals();
 
 private:
-  QXmppClient *_client;
+  QXmppClient _client;
+  QXmppConfiguration _configuration;
   QXmppArchiveManager *_archiveManager;
 
   QmlQXmppPresence *_clientPresence;
+  QmlQXmppConfiguration *_configurationWrapper;
   QmlQXmppArchiveManager *_archiveManagerWrapper;
   QmlQXmppRosterManager *_rosterManagerWrapper;
   QmlQXmppVCardManager* _vcardManagerWrapper;

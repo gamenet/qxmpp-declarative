@@ -1,6 +1,5 @@
 import QtQuick 1.1
 import QXmpp 1.0
-import 'scripts/utils.js' as Utils
 import 'scripts/NicknameCache.js' as NicknameCache
 import 'scripts/AvatarProvider.js' as AvatarProvider
 import 'scripts/Utility.js' as Utility
@@ -34,7 +33,16 @@ Item {
 
     function connect() {
         var bareJid = user + "@" + server;
-        client.connectToServer(bareJid, password);
+
+        //  connect using configuration params
+        client.configuration.host = "j.gamenet.dev";
+        client.configuration.domain = "j.gamenet.dev";
+        client.configuration.user = root.user;
+        client.configuration.password = root.password;
+        client.connectUsingConfiguration();
+
+        //  simple connect, using only JID and password
+        //client.connectToServer(bareJid, password);
     }
 
     function disconnect() {

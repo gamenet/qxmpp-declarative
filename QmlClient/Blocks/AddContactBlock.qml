@@ -1,68 +1,67 @@
 import QtQuick 1.1
 import "../Controls"
 
-Rectangle {
+Item {
     id: root
+
+    property alias color: contentRectangle.color
 
     signal addContact(string jid)
     signal cancel();
 
-    border {
-        color: "#000000"
-        width: 2
-    }
-    color: "#EEEEEE"
-    anchors.margins: 5
-
-    Item {
+    Rectangle {
         anchors.fill: parent
-        anchors.margins: 5
+        color: "#000000"
 
-        Column {
-            spacing: 5
+        Rectangle {
+            id: contentRectangle
 
-            anchors.fill: parent
+            color: "#EEEEEE"
+            anchors {
+                fill: parent
+                margins: 1
+            }
 
-            Row {
-                spacing: 10
-
-                Text {
-                    width: 80
-                    height: 25
-                    anchors.verticalCenter: parent.verticalCenter
-                    font { family: "Arial"; pixelSize: 14 }
-                    text: "JID:"
+            Item {
+                anchors {
+                    fill: parent
+                    margins: 5
                 }
 
-                Rectangle {
-                    width: 300
-                    height: 25
-                    TextEdit {
+                Column {
+                    spacing: 5
+                    anchors.fill: parent
+
+                    FormField {
                         id: contactJid
 
-                        anchors.fill: parent
+                        width: 390
+                        height: 30
+                        caption: "JID:"
+                        captionWidth: 60
                     }
-                }
-            }
-            Row {
-                spacing: 10
-                anchors.horizontalCenter: parent.horizontalCenter
 
-                Button {
-                    text: "Add"
-                    width: 100
-                    height: 30
-                    onClicked: {
-                        root.addContact(contactJid.text);
-                        contactJid.text = "";
-                    }
-                }
-                Button {
-                    text: "Cancel"
-                    width: 100
-                    height: 30
-                    onClicked: {
-                        root.cancel();
+                    Row {
+                        spacing: 10
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        Button {
+                            text: "Add"
+                            width: 100
+                            height: 30
+                            onClicked: {
+                                root.addContact(contactJid.text);
+                                contactJid.text = "";
+                            }
+                        }
+                        Button {
+                            text: "Cancel"
+                            width: 100
+                            height: 30
+                            onClicked: {
+                                root.cancel();
+                            }
+                        }
                     }
                 }
             }

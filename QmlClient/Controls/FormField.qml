@@ -4,7 +4,8 @@ Item {
     id: root
 
     property alias caption: captionText.text
-    property alias value: valueField.text
+    property int captionWidth: 105
+    property alias text: valueField.text
     property alias readOnly: valueField.readOnly
 
     Row {
@@ -13,7 +14,7 @@ Item {
         Text {
             id: captionText
 
-            width: 100
+            width: captionWidth - 5
             height: 25
             style: Text.Normal
             smooth: true
@@ -22,7 +23,7 @@ Item {
         }
 
         Rectangle {
-            width: root.width - 105
+            width: root.width - captionWidth
             height: root.height
 
             TextInput {
@@ -30,7 +31,6 @@ Item {
 
                 anchors.margins: 3
                 anchors.fill: parent
-                text: root.value
                 font { family: "Arial"; pixelSize: 16 }
             }
         }

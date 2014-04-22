@@ -31,3 +31,5 @@
 #else
 # define QMLPLUGIN_EXPORT Q_DECL_IMPORT
 #endif
+
+#define SIGNAL_CONNECT_CHECK(X) { bool result = X; Q_ASSERT_X(result, __FUNCTION__ , #X); }

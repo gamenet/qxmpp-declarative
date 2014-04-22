@@ -22,9 +22,8 @@
  * THE SOFTWARE.
  */
 
+#include <QmlQXmppPlugin_global.h>
 #include <QmlQXmppVCardManager.h>
-
-#define SIGNAL_CONNECT_CHECK(X) { bool result = X; Q_ASSERT_X(result, __FUNCTION__ , #X); }
 
 QmlQXmppVCardManager::QmlQXmppVCardManager(QXmppVCardManager *vcardMgr, QObject *parent)
   : QObject(parent)

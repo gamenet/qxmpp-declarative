@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
   view.engine()->importPlugin(QApplication::applicationDirPath() + QString("/qxmpp-declarative.dll"), "QXmpp", &errStr);
 #endif
 
-  view.setSource(QApplication::applicationDirPath() + QString("/Main.qml"));
+  view.setSource(QUrl::fromLocalFile(QApplication::applicationDirPath() + QString("/Main.qml")));
   view.show();
 
   return app.exec();

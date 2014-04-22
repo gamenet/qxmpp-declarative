@@ -20,9 +20,9 @@ function removeId(id) {
 }
 
 function shiftIndexes(base, shift) {
-    for (var link in idToIndex) {
-        if (idToIndex[link] > base) {
-            idToIndex[link] += shift;
+    for (var key in idToIndex) {
+        if (idToIndex[key] >= base) {
+            idToIndex[key] += shift;
         }
     }
 }

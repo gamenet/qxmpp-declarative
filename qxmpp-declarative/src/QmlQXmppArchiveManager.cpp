@@ -22,11 +22,10 @@
  * THE SOFTWARE.
  */
 
+#include <QmlQXmppPlugin_global.h>
 #include <QXmppArchiveIq.h>
 #include <QXmppArchiveManager.h>
 #include <QmlQXmppArchiveManager.h>
-
-#define SIGNAL_CONNECT_CHECK(X) { bool result = X; Q_ASSERT_X(result, __FUNCTION__ , #X); }
 
 QmlQXmppArchiveManager::QmlQXmppArchiveManager(QXmppArchiveManager *archiveMgr, QObject *parent)
   : QObject(parent)

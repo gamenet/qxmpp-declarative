@@ -25,9 +25,6 @@ Rectangle {
         }
         onContactAdded: {
             contactList.addContact(bareJid);
-            //if (properties.hasOwnProperty("nickname")) {
-            //rosterModel.setNickname(jid, NicknameCache.getNickname(rosterUsers[i]));
-            //rosterModel.setStatusType(jid, Utility.presenceToString(QXmppPresence.Online));
         }
         onContactRemoved: {
             contactList.removeContact(bareJid);
@@ -60,7 +57,6 @@ Rectangle {
             password: "123"
 
             onLogin: {
-                console.log("onAccepted: " + loginDialog.user);
                 xmppClient.user = loginDialog.user;
                 xmppClient.password = loginDialog.password;
                 xmppClient.connect();
@@ -146,7 +142,7 @@ Rectangle {
                     id: editcontactBlock
 
                     width: root.width
-                    height: 200
+                    height: 160
                     visible: false
                     rosterManager: xmppClient.rosterManager
                     jid: d.currentJid

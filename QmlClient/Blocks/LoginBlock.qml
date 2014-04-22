@@ -16,52 +16,22 @@ Item {
     Column {
         spacing: 5
 
-        Row {
-            spacing: 10
-            Text {
-                text: "User: "
-                width: 100
-                height: 25
-                style: Text.Normal
-                font { family: "Arial"; pixelSize: 14 }
-            }
+        FormField {
+            id: userInput
 
-            Rectangle {
-                width: 200
-                height: 25
-
-                TextInput {
-                    id: userInput
-
-                    anchors.fill: parent
-                    font { family: "Arial"; pixelSize: 16 }
-                }
-
-            }
+            caption: "User: "
+            captionWidth: 100
+            width: 350
+            height: 25
         }
 
-        Row {
-            spacing: 10
+        FormField {
+            id: passwordInput
 
-            Text {
-                text: "Password:"
-                width: 100
-                height: 25
-                style: Text.Normal
-                font { family: "Arial"; pixelSize: 14 }
-            }
-
-            Rectangle {
-                width: 200
-                height: 25
-
-                TextInput {
-                    id: passwordInput
-
-                    anchors.fill: parent
-                    font { family: "Arial"; pixelSize: 16 }
-                }
-            }
+            caption: "Password:"
+            captionWidth: 100
+            width: 350
+            height: 25
         }
 
         Row {

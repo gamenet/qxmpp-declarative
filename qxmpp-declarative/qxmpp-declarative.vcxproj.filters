@@ -56,6 +56,9 @@
     <CustomBuild Include="include\QmlQXmppVCardManager.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="include\QmlQXmppConfiguration.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\Debug\moc_QmlQXmppArchiveManager.cpp">
@@ -120,6 +123,15 @@
     </ClCompile>
     <ClCompile Include="src\QmlQXmppVCardManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QmlQXmppConfiguration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_QmlQXmppConfiguration.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_QmlQXmppConfiguration.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

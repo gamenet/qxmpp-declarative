@@ -20,5 +20,24 @@ function presenceToString(presence) {
 }
 
 function subscriptionToString(sub) {
-    //if()
+    if (sub == QXmppRosterManager.None) {
+        return "None";
+    }
+    if (sub == QXmppRosterManager.From) {
+        return "From";
+    }
+    if (sub == QXmppRosterManager.To) {
+        return "To";
+    }
+    if (sub == QXmppRosterManager.Both) {
+        return "Both";
+    }
+    return "None";
+}
+
+function jidToUser(jid) {
+    var pos = jid.indexOf('@');
+    if (pos < 0)
+        return '';
+    return jid.substring(0, pos);
 }

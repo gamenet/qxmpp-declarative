@@ -6,7 +6,7 @@ Item {
 
     property bool isCurrent
     property color normal: "#BBBBBB"
-    property color highlite: "yellow"
+    property color highlite: "#FFFF00"
 
     signal subscribe(string jid)
     signal unsubscribe(string jid)
@@ -93,31 +93,4 @@ Item {
         }
     }
 }
-
-//    StateGroup {
-//        states: [
-//            //                    State {
-//            //                        name: "Hovered"
-//            //                        when: delegateArea.containsMouse
-//            //                        PropertyChanges {
-//            //                            target: delegateRoot
-//            //                            color: "#BBBBBB"
-//            //                        }
-//            //                    },
-//            State {
-//                name: "DragInProgress"
-//                when: index == contactsList.currentDraggingIndex
-//                PropertyChanges { target: contactContent; parent: dndContainer }
-//                //PropertyChanges { target: itemImage; anchors.centerIn: undefined }
-//                PropertyChanges { target: contactContent; x: mouseArea.mouseX - 100 }
-//                PropertyChanges { target: contactContent; y: mouseArea.mouseY - 30 }
-//            },
-//            State {
-//                name: "Faded"
-//                when: contactsList.currentDraggingIndex != -1 && index != contactsList.currentDraggingIndex
-//                PropertyChanges { target: contactContent; opacity: 0.6}
-//            }
-
-//        ]
-//    }
 

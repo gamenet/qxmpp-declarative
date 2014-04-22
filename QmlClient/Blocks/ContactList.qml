@@ -3,29 +3,26 @@ import QXmpp 1.0
 import "../Models"
 import "../Controls" as Controls
 import "../scripts/Utility.js" as Utility
-import "../scripts/utils.js" as WiLinkUtils
 import "../scripts/AvatarProvider.js" as AvatarProvider
 
 Column {
     id: root
 
-    property string current: extendedModel.model().get(d.currentContact).jid || ""
+    property string current: extendedModel.get(d.currentContact).jid || ""
 
     signal contactClicked(string jid)
     signal contactDoubleClicked(string jid)
 
     function addContact(bareJid) {
-        //console.log("addContact: " + bareJid +  "avatar == " + WiLinkUtils.jidToUser(bareJid) + ".png");
         extendedModel.append({"jid": bareJid,
                                  "nickname": bareJid,
-                                 "avatar": AvatarProvider.getAvatar(WiLinkUtils.jidToUser(bareJid)),
+                                 "avatar": AvatarProvider.getAvatar(Utility.jidToUser(bareJid)),
                                  "status": "offline",
                                  "statusText": "",
                                  "hasNewMessages": false});
     }
 
     function removeContact(bareJid) {
-        //console.log("removeContact: " + bareJid);
         extendedModel.removeById(bareJid);
     }
 
@@ -66,7 +63,7 @@ Column {
     }
 
     function setNewMessages(bareJid, hasNewMsg) {
-        extendedModel.setPropertyById(bareJid, "hasNewMessages", text);
+        extendedModel.setPropertyById(bareJid, "hasNewMessages", hasNewMsg);
     }
 
     spacing: 10
@@ -87,14 +84,13 @@ Column {
         delegate: ContactListDelegate {
             isCurrent: model.index == d.currentContact
         }
-        model: extendedModel.model()
+        model: extendedModel.model
 
         ExtendedListModel {
             id: extendedModel
 
             idProperty: "jid"
         }
-
 
         MouseArea {
             anchors.fill: parent

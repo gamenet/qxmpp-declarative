@@ -1,7 +1,5 @@
 import QtQuick 1.1
 
-//import "./models/ChatHistoryModel.js" as History
-
 ListView {
     id: listview
 
@@ -10,8 +8,6 @@ ListView {
         height: 25
 
         Text {
-            id: messageText
-
             x: 5
             anchors.verticalCenter: parent.verticalCenter
             width: 200

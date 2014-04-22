@@ -28,17 +28,16 @@
 #include <QXmppPresence.h>
 #include <QXmppArchiveManager.h>
 
+#include <QmlQXmppPlugin_global.h>
 #include <QmlQXmppClient.h>
 #include <QmlQXmppPresence.h>
+#include <QmlQXmppConfiguration.h>
 #include <QmlQXmppArchiveManager.h>
 #include <QmlQXmppRosterManager.h>
 #include <QmlQXmppVCardManager.h>
 
-#define SIGNAL_CONNECT_CHECK(X) { bool result = X; Q_ASSERT_X(result, __FUNCTION__ , #X); }
-
 QmlQXmppClient::QmlQXmppClient(QObject *parent)
     : QObject(parent)
-    , _client(new QXmppClient(this))
     , _archiveManager(0)
     , _archiveManagerWrapper(0)
     , _rosterManagerWrapper(0)
@@ -51,15 +50,23 @@ QmlQXmppClient::~QmlQXmppClient()
 {
 }
 //
+QmlQXmppConfiguration *QmlQXmppClient::configuration()
+{
+  if (!this->_configurationWrapper) {
+    this->_configurationWrapper = new QmlQXmppConfiguration(&this->_configuration);
+  }
+  return this->_configurationWrapper;
+}
+
 QmlQXmppArchiveManager *QmlQXmppClient::archiveManager()
 {
   if (!this->_archiveManager) {
     this->_archiveManager = new QXmppArchiveManager;
-    this->_client->addExtension(this->_archiveManager);
+    this->_client.addExtension(this->_archiveManager);
   }
 
   //if (!this->_archiveManagerWrapper)
-  //  this->_archiveManagerWrapper = new QmlQXmppArchiveManager(&this->_client->arcManager(), this);
+  //  this->_archiveManagerWrapper = new QmlQXmppArchiveManager(&this->_client.arcManager(), this);
 
   return _archiveManagerWrapper;
 }
@@ -68,7 +75,7 @@ QmlQXmppArchiveManager *QmlQXmppClient::archiveManager()
 QmlQXmppRosterManager *QmlQXmppClient::rosterManager()
 {
   if (!this->_rosterManagerWrapper)
-    this->_rosterManagerWrapper = new QmlQXmppRosterManager(&this->_client->rosterManager(), this);
+    this->_rosterManagerWrapper = new QmlQXmppRosterManager(&this->_client.rosterManager(), this);
 
   return this->_rosterManagerWrapper;
 }
@@ -76,15 +83,15 @@ QmlQXmppRosterManager *QmlQXmppClient::rosterManager()
 QmlQXmppVCardManager *QmlQXmppClient::vcardManager()
 {
   if (!this->_vcardManagerWrapper)
-    this->_vcardManagerWrapper = new QmlQXmppVCardManager(&this->_client->vCardManager(), this);
+    this->_vcardManagerWrapper = new QmlQXmppVCardManager(&this->_client.vCardManager(), this);
  
   return this->_vcardManagerWrapper;
 }
 
 QString QmlQXmppClient::clientStatusType()
 {
-  if (this->_client->clientPresence().type() == QXmppPresence::Available) {
-    return QmlQXmppPresence::statusToString(this->_client->clientPresence().availableStatusType());
+  if (this->_client.clientPresence().type() == QXmppPresence::Available) {
+    return QmlQXmppPresence::statusToString(this->_client.clientPresence().availableStatusType());
   } else {
     return "offline";
   }
@@ -93,14 +100,14 @@ QString QmlQXmppClient::clientStatusType()
 void QmlQXmppClient::setClientStatusType(const QString &value)
 {
   if (value != this->clientStatusType()) {
-    QXmppPresence presence = this->_client->clientPresence();
+    QXmppPresence presence = this->_client.clientPresence();
     if (value == "offline") {
       presence.setType(QXmppPresence::Unavailable);
     } else {
       presence.setType(QXmppPresence::Available);
       presence.setAvailableStatusType(QmlQXmppPresence::stringToStatus(value));
     }
-    this->_client->setClientPresence(presence);
+    this->_client.setClientPresence(presence);
 
     emit statusTypeChanged(value);
   }
@@ -108,39 +115,38 @@ void QmlQXmppClient::setClientStatusType(const QString &value)
 
 QString QmlQXmppClient::clientStatusText()
 {
-  return this->_client->clientPresence().statusText();
+  return this->_client.clientPresence().statusText();
 }
 
 void QmlQXmppClient::setClientStatusText(const QString &value)
 {
   if (value != this->clientStatusText()) {
-    QXmppPresence presence = this->_client->clientPresence();
+    QXmppPresence presence = this->_client.clientPresence();
     presence.setStatusText(value);
-    this->_client->setClientPresence(presence);
+    this->_client.setClientPresence(presence);
 
     emit statusTextChanged(value);
   }
 }
 
+void QmlQXmppClient::connectUsingConfiguration()
+{
+  this->_client.connectToServer(this->_configuration);
+}
+
 void QmlQXmppClient::connectToServer(const QString &jid, const QString &password)
 {
- Q_ASSERT(this->_client);
-
- this->_client->connectToServer(jid, password);
+ this->_client.connectToServer(jid, password);
 }
 
 void QmlQXmppClient::disconnectFromServer()
 {
- Q_ASSERT(this->_client);
-
- this->_client->disconnectFromServer();
+ this->_client.disconnectFromServer();
 }
 
 void QmlQXmppClient::sendMessage(const QString& bareJid, const QString& message)
 {
- Q_ASSERT(this->_client);
-
- this->_client->sendMessage(bareJid, message);
+ this->_client.sendMessage(bareJid, message);
 }
 
 void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
@@ -156,11 +162,9 @@ void QmlQXmppClient::onPresenceReceived(const QXmppPresence &presence)
 
 void QmlQXmppClient::connectSignals()
 {
-  Q_ASSERT(this->_client);
-
-  SIGNAL_CONNECT_CHECK(connect(this->_client, SIGNAL(error(QXmppClient::Error)), this, SIGNAL(error(QXmppClient::Error))));
-  SIGNAL_CONNECT_CHECK(connect(this->_client, SIGNAL(connected()), this, SIGNAL(connected())));
-  SIGNAL_CONNECT_CHECK(connect(this->_client, SIGNAL(disconnected()), this, SIGNAL(disconnected())));
-  SIGNAL_CONNECT_CHECK(connect(this->_client, SIGNAL(messageReceived(const QXmppMessage &)), this, SLOT(onMessageReceived(const QXmppMessage &))));
-  SIGNAL_CONNECT_CHECK(connect(this->_client, SIGNAL(presenceReceived(const QXmppPresence &)), this, SLOT(onPresenceReceived(const QXmppPresence &))));
+  SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(error(QXmppClient::Error)), this, SIGNAL(error(QXmppClient::Error))));
+  SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(connected()), this, SIGNAL(connected())));
+  SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(disconnected()), this, SIGNAL(disconnected())));
+  SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(messageReceived(const QXmppMessage &)), this, SLOT(onMessageReceived(const QXmppMessage &))));
+  SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(presenceReceived(const QXmppPresence &)), this, SLOT(onPresenceReceived(const QXmppPresence &))));
 }

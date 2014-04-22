@@ -31,6 +31,7 @@
 #include <QmlQXmppPlugin.h>
 #include <QmlQXmppPresence.h>
 #include <QmlQXmppClient.h>
+#include <QmlQXmppConfiguration.h>
 #include <QmlQXmppArchiveManager.h>
 #include <QmlQXmppRosterManager.h>
 #include <QmlQXmppVCardManager.h>
@@ -39,6 +40,7 @@ void QmlQXmppPlugin::registerTypes(const char *uri)
 {
   qmlRegisterUncreatableType<QmlQXmppPresence>("QXmpp", 1, 0, "QXmppPresence", "Do not create QXmppPresence instances.");
   qmlRegisterType<QmlQXmppClient>("QXmpp", 1, 0, "QXmppClient");
+  qmlRegisterUncreatableType<QmlQXmppConfiguration>("QXmpp", 1, 0, "QXmppConfiguration", "Do not create QXmppConfiguration instances.");
   qmlRegisterUncreatableType<QmlQXmppArchiveManager>("QXmpp", 1, 0, "QXmppArchiveManager", "Do not create QXmppArchiveManager instances.");
   qmlRegisterUncreatableType<QmlQXmppRosterManager>("QXmpp", 1, 0, "QXmppRosterManager", "Do not create QXmppRosterManager instances.");
   qmlRegisterUncreatableType<QmlQXmppVCardManager>("QXmpp", 1, 0, "QXmppVCardManager", "Do not create QmlQXmppVCardManager instances.");

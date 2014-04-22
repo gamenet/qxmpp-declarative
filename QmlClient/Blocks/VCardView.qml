@@ -35,17 +35,6 @@ Rectangle {
             spacing: 5
             anchors.fill: parent
 
-//            Row {
-//                Image {
-//                    id: userAvatar
-
-//                    width: 48
-//                    height: 48
-//                    fillMode: Image.PreserveAspectFit
-//                    source: "image://xmppimageprovider/" + xmppClient.getVCardProperty(currentJid, "PHOTO");
-//                }
-//            }
-
             FormField {
                 id: firstNameField
 
