@@ -16,15 +16,13 @@ Item {
         if (!dict)
             return;
 
-        if (dict[root.idProperty] && dict.hasOwnProperty(root.idProperty)) {
+        if (dict.hasOwnProperty(root.idProperty) && dict[root.idProperty]) {
             var key = dict[root.idProperty];
 
             if (ExtendedListModelJs.idToIndex.hasOwnProperty(key)) {
                 index = ExtendedListModelJs.idToIndex[key];
-                ExtendedListModelJs.removeId(key);
                 listModel.remove(index);
-                ExtendedListModelJs.idToIndex[key] = listModel.count;
-                listModel.append(dict);
+                listModel.insert(index, dict);
             } else {
                 index = listModel.count;
                 listModel.append(dict);
@@ -67,8 +65,8 @@ Item {
         var index = 0;
         var key;
 
-        if (at >= listModel.count) {
-            root.append(dict);
+        if (at > listModel.count) {
+            console.log("Error in ExtendedListModel::insert(...): 'at' is out of range, at == " + at);
             return;
         }
 
@@ -76,13 +74,21 @@ Item {
             key = dict[root.idProperty];
 
             if (ExtendedListModelJs.idToIndex.hasOwnProperty(key)) {
-                //  already exists
-                return;
+                index = ExtendedListModelJs.idToIndex[key];
+                listModel.remove(index);
+                if (at > listModel.count) {
+                    listModel.insert(at - 1, dict);
+                    ExtendedListModelJs.idToIndex[key] = at - 1;
+                } else {
+                    listModel.insert(at, dict);
+                    ExtendedListModelJs.idToIndex[key] = at;
+                }
+            } else {
+                ExtendedListModelJs.insertId(at, key);
+                listModel.insert(at, dict);
             }
-
-            ExtendedListModelJs.insertId(at, key);
-            listModel.insert(at, dict);
         }
+        d.sendSourceChanged();
     }
 
     function remove(index) {
@@ -124,7 +130,7 @@ Item {
     }
 
     function getPropertyById(id, name) {
-         var item;
+        var item;
 
         if (!ExtendedListModelJs.idToIndex.hasOwnProperty(id)) {
             return;
@@ -168,31 +174,43 @@ Item {
         return result;
     }
 
+    function sort(sortFunction)
+    {
+        var sortdata = [];
+
+        for (var i = 0; i < listModel.count; ++i)
+            sortdata[i] = listModel.get(i);
+
+        sortdata.sort(sortFunction);
+
+        for (var i = 0; i < sortdata.length; ++i) {
+            for (var j = 0; j < listModel.count; ++j) {
+                if (listModel.get(j) === sortdata[i]) {
+                    listModel.move(j, model.count - 1, 1);
+                    break;
+                }
+            }
+        }
+    }
+
     function sortByColumn(columnName, sortFunction)
     {
         var sortFn = sortFunction || ascending;
         var sortdata = [];
 
         for (var i = 0; i < listModel.count; ++i) {
-            var itemId = listModel.get(i).toString();
             var obj = listModel.get(i);
 
-            if (obj[columnName] != undefined) {
-                sortdata[i] = {
-                    id: itemId,
-                    value: obj[columnName]
-                };
-            } else {
-                console.log("Field '" + columnName + "' not found in item " + itemId);
-                return;
-            }
-
+            sortdata[i] = {
+                id: obj,
+                value: obj[columnName]
+            };
         }
         sortdata.sort(sortFn);
 
         for (var i = 0; i < sortdata.length; ++i) {
-            for (var j = 0; j < listModel.count; ++j){
-                if (listModel.get(j).toString() === sortdata[i].id) {
+            for (var j = 0; j < listModel.count; ++j) {
+                if (listModel.get(j) === sortdata[i].id) {
                     listModel.move(j, listModel.count - 1, 1);
                     break;
                 }
@@ -201,6 +219,9 @@ Item {
     }
 
     function ascending(a, b) {
+        if (a.value === b.value) {
+            return 0;
+        }
         if (a.value > b.value) {
             return 1;
         }
@@ -208,6 +229,9 @@ Item {
     }
 
     function descending(a, b) {
+        if (a.value === b.value) {
+            return 0;
+        }
         if (a.value < b.value) {
             return 1;
         }
@@ -227,6 +251,6 @@ Item {
     }
 
     ListModel {
-     id: listModel
+        id: listModel
     }
 }
