@@ -34,7 +34,7 @@ Rectangle {
             onlineGui.state = "SubscriptionRequest";
         }
         onMessageReceived: {
-            contactList.setNewMessages(from, true);
+            contactList.setNewMessages(message.from, true);
         }
     }
 

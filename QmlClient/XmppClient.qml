@@ -92,8 +92,8 @@ Item {
         }
 
         onMessageReceived: {
-            console.log("Received message: " + from);
-            console.log("\tmessage: " + message);
+            console.log("Received message: " + message.from);
+            console.log("\tmessage: " + message.body);
             //console.log("\textra: " + message.extra.test);
         }
 

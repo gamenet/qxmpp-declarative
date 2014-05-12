@@ -93,7 +93,7 @@ signals:
   /// know the error.
   void error(QXmppClient::Error);
 
-  void messageReceived(QString from, QString message);
+  void messageReceived(QmlQXmppMessage* message);
 
   //  This signal is emitted when client presence type changes.
   void presenceReceived(QmlQXmppPresence *presence);
