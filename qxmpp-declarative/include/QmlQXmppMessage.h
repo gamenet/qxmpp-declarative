@@ -54,39 +54,22 @@ public:
     QmlQXmppMessage& operator=(const QXmppMessage &other);
 
     QString body() const;
-
     bool isAttentionRequested() const;
-
     bool isReceiptRequested() const;
-
     QString mucInvitationJid() const;
-
     QString mucInvitationPassword() const;
-
     QString mucInvitationReason() const;
-
     QString receiptId() const;
-
     QDateTime stamp() const;
-
     QXmppMessage::State state() const;
-
     QString subject() const;
-
     QString thread() const;
-
     QXmppMessage::Type type() const;
-
     QString xhtml() const;
-
     QString to() const;
-
     QString from() const;
-
     QString id() const;
-
     QString lang() const;
-
     QXmppStanza::Error error() const;
 
 private:
