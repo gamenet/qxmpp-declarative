@@ -30,6 +30,7 @@
 
 #include <QmlQXmppPlugin_global.h>
 #include <QmlQXmppClient.h>
+#include <QmlQXmppMessage.h>
 #include <QmlQXmppPresence.h>
 #include <QmlQXmppConfiguration.h>
 #include <QmlQXmppArchiveManager.h>
@@ -151,7 +152,8 @@ void QmlQXmppClient::sendMessage(const QString& bareJid, const QString& message)
 
 void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
 {
-  emit messageReceived(message.from(), message.body());
+  QmlQXmppMessage qmlmessage(message);
+  emit messageReceived(&qmlmessage);
 }
 
 void QmlQXmppClient::onPresenceReceived(const QXmppPresence &presence)
