@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <QObject>
+#include <QtCore/QObject>
 #include <QXmppMessage.h>
 
 class QmlQXmppMessage : public QObject
