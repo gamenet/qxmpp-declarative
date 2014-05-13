@@ -1,90 +1,78 @@
-/*
- * The MIT License (MIT)
- * 
- * Copyright (c) 2014 GameNet
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *  
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 #include <QmlQXmppVCard.h>
 
-QmlQXmppVCard::QmlQXmppVCard(QObject *parent)
-    : QObject(parent)
+QmlQXmppVCard::QmlQXmppVCard(const QStringList &customElements)
+  : _customElements(customElements)
 {
+
+}
+
+QmlQXmppVCard::QmlQXmppVCard(const QmlQXmppVCard &p)
+{
+
 }
 
 QmlQXmppVCard::~QmlQXmppVCard()
 {
+
 }
 
-QmlQXmppVCard& QmlQXmppVCard::operator=(const QXmppVCardIq &xmppVCard)
+QmlQXmppVCard& QmlQXmppVCard::operator=(const QmlQXmppVCard &xmppVCard)
 {
-  this->_vcard = xmppVCard;
+  this->_customElements = xmppVCard._customElements;
   return *this;
 }
 
-QString QmlQXmppVCard::from() const
+void QmlQXmppVCard::setExtra(const QVariantMap &map)
 {
-  return _vcard.from();
+  this->_extraData = map;
 }
 
-QDate QmlQXmppVCard::birthday() const
+QVariantMap QmlQXmppVCard::extra() const
 {
-    return _vcard.birthday();
+  return this->_extraData;
 }
 
-QString QmlQXmppVCard::description() const
+void QmlQXmppVCard::setCustomElements(const QStringList &customElements)
 {
-    return _vcard.description();
+  this->_customElements = customElements;
 }
 
-QString QmlQXmppVCard::email() const
+QStringList QmlQXmppVCard::customElements() const
 {
-    return _vcard.email();
+  return this->_customElements;
 }
 
-QString QmlQXmppVCard::firstName() const
+void QmlQXmppVCard::parseElementFromChild(const QDomElement &nodeRecv)
 {
-    return _vcard.firstName();
+  QXmppVCardIq::parseElementFromChild(nodeRecv);
+  QDomElement cardElement = nodeRecv.firstChildElement("vCard");
+  QDomElement child = cardElement.firstChildElement();
+  while (!child.isNull()) {
+    QString elementName = child.tagName();
+    if (elementName == "EXTRA") {
+      QDomElement extraChild = child.firstChildElement();
+      while (!extraChild.isNull()) {
+        QString keyName = extraChild.tagName();
+        QString value = extraChild.text();
+        this->_extraData.insert(keyName, value);
+
+        extraChild = extraChild.nextSiblingElement();
+      }
+    }
+    child = child.nextSiblingElement();
+  }
 }
 
-QString QmlQXmppVCard::fullName() const
+void QmlQXmppVCard::toXmlElementFromChild(QXmlStreamWriter *writer) const
 {
-    return _vcard.fullName();
-}
+  QXmppVCardIq::toXmlElementFromChild(writer);
 
-QString QmlQXmppVCard::lastName() const
-{
-    return _vcard.lastName();
-}
+  writer->writeStartElement("EXTRA");
 
-QString QmlQXmppVCard::middleName() const
-{
-    return _vcard.middleName();
-}
+  QVariantMap::const_iterator it = this->_extraData.constBegin();
+  for (; it != this->_extraData.constEnd(); ++it) {
+    writer->writeTextElement(it.key(), it.value().toString());
+  }
 
-QString QmlQXmppVCard::nickName() const
-{
-    return _vcard.nickName();
-}
-
-QString QmlQXmppVCard::url() const
-{
-    return _vcard.url();
+  writer->writeEndElement();
 }

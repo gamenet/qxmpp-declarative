@@ -1,54 +1,42 @@
-/*
- * The MIT License (MIT)
- * 
- * Copyright (c) 2014 GameNet
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *  
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 #pragma once
 
-#include <QtCore/QList>
-
 #include <QXmppVCardManager.h>
+
 #include <QmlQXmppVCard.h>
 
-class QmlQXmppVCardManager : public QObject
+class QmlQXmppVCardManager : public QXmppVCardManager
 {
   Q_OBJECT
 
 public:
-  QmlQXmppVCardManager(QXmppVCardManager *vcardMgr = 0, QObject *parent = 0);
+  QmlQXmppVCardManager();
   ~QmlQXmppVCardManager();
 
-public slots:
-  void requestVCard(const QString& jid);
+  void setExtraFields(const QStringList &extraElements = QStringList() << "EXTRA");
+  QStringList extraFields() const;
 
-private slots:
-  void onVCardReceived(const QXmppVCardIq& vcardIq); 
+  Q_INVOKABLE QString requestVCard(const QString& bareJid = "");
+
+  Q_INVOKABLE const QmlQXmppVCard& clientVCard() const;
+  Q_INVOKABLE void setClientVCard(const QmlQXmppVCard&);
+
+  Q_INVOKABLE QString requestClientVCard();
+  Q_INVOKABLE bool isClientVCardReceived() const;
+
+  bool handleStanza(const QDomElement &element);
 
 signals:
+  /// This signal is emitted when the requested vCard is received
+  /// after calling the requestVCard() function.
   void vCardReceived(QmlQXmppVCard *vcard);
+  //void vCardReceived(const QString& vcard);
+
+  /// This signal is emitted when the client's vCard is received
+  /// after calling the requestClientVCard() function.
+  void clientVCardReceived();
 
 private:
-  void connectSignals();
-
-private:
-  QXmppVCardManager *_vcardManager;
+  QmlQXmppVCard _clientVCard;
+  bool _isClientVCardReceived;
+  QStringList _customElements;
 };

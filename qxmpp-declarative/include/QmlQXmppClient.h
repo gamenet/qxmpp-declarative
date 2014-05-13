@@ -34,7 +34,6 @@ class QmlQXmppConfiguration;
 class QmlQXmppArchiveManager;
 class QmlQXmppRosterManager;
 class QmlQXmppVCardManager;
-
 class QXmppArchiveManager;
 
 class QmlQXmppClient : public QObject
@@ -96,7 +95,7 @@ signals:
   void messageReceived(QString from, QString message);
 
   //  This signal is emitted when client presence type changes.
-  void presenceReceived(QmlQXmppPresence *presence);
+  void presenceReceived(const QmlQXmppPresence &presence);
 
   //  This signal is emitted when client status type changes.
   void statusTypeChanged(const QString &type);

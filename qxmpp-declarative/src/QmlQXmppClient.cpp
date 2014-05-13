@@ -23,10 +23,12 @@
  */
 
 #include <QtDeclarative/QDeclarativeEngine>
+#include <QtQml/QQmlEngine>
 
 #include <QXmppMessage.h>
 #include <QXmppPresence.h>
 #include <QXmppArchiveManager.h>
+#include <QXmppVCardManager.h>
 
 #include <QmlQXmppPlugin_global.h>
 #include <QmlQXmppClient.h>
@@ -82,8 +84,14 @@ QmlQXmppRosterManager *QmlQXmppClient::rosterManager()
 
 QmlQXmppVCardManager *QmlQXmppClient::vcardManager()
 {
-  if (!this->_vcardManagerWrapper)
-    this->_vcardManagerWrapper = new QmlQXmppVCardManager(&this->_client.vCardManager(), this);
+  if (!this->_vcardManagerWrapper) {
+    //  removing QXmpp vCard manager implementation
+    QXmppClientExtension *extension = this->_client.findExtension<QXmppVCardManager>();
+    this->_client.removeExtension(extension);
+
+    this->_vcardManagerWrapper = new QmlQXmppVCardManager;
+    this->_client.addExtension(this->_vcardManagerWrapper);
+  }
  
   return this->_vcardManagerWrapper;
 }
@@ -156,7 +164,10 @@ void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
 
 void QmlQXmppClient::onPresenceReceived(const QXmppPresence &presence)
 {
-  QmlQXmppPresence *presenceWrapper = new QmlQXmppPresence(presence);
+  QmlQXmppPresence presenceWrapper(presence);
+  //qDebug() << "ObjectOwnership before: " << QQmlEngine::objectOwnership(presenceWrapper);
+  //QQmlEngine::setObjectOwnership(presenceWrapper, QQmlEngine::JavaScriptOwnership);
+  //qDebug() << "ObjectOwnership after: " << QQmlEngine::objectOwnership(presenceWrapper);
   emit presenceReceived(presenceWrapper);
 }
 
