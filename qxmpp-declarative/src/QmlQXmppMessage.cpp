@@ -84,9 +84,9 @@ QDateTime QmlQXmppMessage::stamp() const
     return this->_message.stamp();
 }
 
-QXmppMessage::State QmlQXmppMessage::state() const
+QmlQXmppMessage::State QmlQXmppMessage::state() const
 {
-    return this->_message.state();
+    return static_cast<QmlQXmppMessage::State>(this->_message.state());
 }
 
 QString QmlQXmppMessage::xhtml() const
@@ -94,9 +94,9 @@ QString QmlQXmppMessage::xhtml() const
     return this->_message.xhtml();
 }
 
-QXmppMessage::Type QmlQXmppMessage::type() const
+QmlQXmppMessage::Type QmlQXmppMessage::type() const
 {
-    return this->_message.type();
+    return static_cast<QmlQXmppMessage::Type>(this->_message.type());
 }
 
 QString QmlQXmppMessage::subject() const
