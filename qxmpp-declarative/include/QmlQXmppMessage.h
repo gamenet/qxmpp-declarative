@@ -30,6 +30,9 @@
 class QmlQXmppMessage : public QObject
 {
     Q_OBJECT
+
+    Q_ENUMS(Type)
+    Q_ENUMS(State)
     Q_PROPERTY(QString body READ body)
     Q_PROPERTY(bool isAttentionRequested READ isAttentionRequested);
     Q_PROPERTY(bool isReceiptRequested READ isReceiptRequested);
@@ -41,6 +44,8 @@ class QmlQXmppMessage : public QObject
     Q_PROPERTY(QString subject READ subject);
     Q_PROPERTY(QString thread READ thread);
     Q_PROPERTY(QString xhtml READ xhtml);
+    Q_PROPERTY(QmlQXmppMessage::State state READ state);
+    Q_PROPERTY(QmlQXmppMessage::Type type READ type);
 
     Q_PROPERTY(QString to READ to);
     Q_PROPERTY(QString from READ from);
@@ -48,6 +53,25 @@ class QmlQXmppMessage : public QObject
     Q_PROPERTY(QString lang READ lang);
 
 public:
+    enum Type
+    {
+        Error = QXmppMessage::Error,
+        Normal = QXmppMessage::Normal,
+        Chat = QXmppMessage::Chat,
+        GroupChat = QXmppMessage::GroupChat,
+        Headline = QXmppMessage::Headline
+    };
+
+    enum State
+    {
+        None = QXmppMessage::None, 
+        Active = QXmppMessage::Active,
+        Inactive = QXmppMessage::Inactive,
+        Gone = QXmppMessage::Gone,
+        Composing = QXmppMessage::Composing,
+        Paused = QXmppMessage::Paused,
+    };
+
     QmlQXmppMessage(QObject *parent = 0);
     QmlQXmppMessage(const QXmppMessage &other, QObject *parent = 0);
     ~QmlQXmppMessage();
@@ -62,10 +86,10 @@ public:
     QString mucInvitationReason() const;
     QString receiptId() const;
     QDateTime stamp() const;
-    QXmppMessage::State state() const;
+    State state() const;
     QString subject() const;
     QString thread() const;
-    QXmppMessage::Type type() const;
+    Type type() const;
     QString xhtml() const;
     QString to() const;
     QString from() const;
