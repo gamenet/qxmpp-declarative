@@ -29,6 +29,11 @@ QmlQXmppMessage::QmlQXmppMessage(QObject *parent)
 {
 }
 
+QmlQXmppMessage::QmlQXmppMessage(const QXmppMessage &other, QObject *parent)
+    : QObject(parent), _message(other)
+{
+}
+
 QmlQXmppMessage::~QmlQXmppMessage()
 {
 

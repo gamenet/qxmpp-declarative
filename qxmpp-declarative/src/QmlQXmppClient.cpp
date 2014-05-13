@@ -152,8 +152,7 @@ void QmlQXmppClient::sendMessage(const QString& bareJid, const QString& message)
 
 void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
 {
-  QmlQXmppMessage qmlmessage;
-  qmlmessage = message;
+  QmlQXmppMessage qmlmessage(message);
   emit messageReceived(&qmlmessage);
 }
 

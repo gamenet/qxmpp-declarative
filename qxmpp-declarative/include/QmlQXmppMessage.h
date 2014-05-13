@@ -49,6 +49,7 @@ class QmlQXmppMessage : public QObject
 
 public:
     QmlQXmppMessage(QObject *parent = 0);
+    QmlQXmppMessage(const QXmppMessage &other, QObject *parent = 0);
     ~QmlQXmppMessage();
 
     QmlQXmppMessage& operator=(const QXmppMessage &other);
