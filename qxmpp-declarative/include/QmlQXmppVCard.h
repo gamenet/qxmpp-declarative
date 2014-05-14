@@ -57,8 +57,8 @@ public:
   QString extraElementName() const;
 
 protected:
-  void parseElementFromChild(const QDomElement&);
-  void toXmlElementFromChild(QXmlStreamWriter *writer) const;
+  void parseElementFromChild(const QDomElement&) override;
+  void toXmlElementFromChild(QXmlStreamWriter *writer) const override;
 
 private:
   QString _extraElementName;

@@ -75,25 +75,25 @@ QString QmlQXmppVCard::extraElementName() const
 void QmlQXmppVCard::parseElementFromChild(const QDomElement &nodeRecv)
 {
   QXmppVCardIq::parseElementFromChild(nodeRecv);
-  QDomElement child = nodeRecv.firstChildElement("vCard");
+  QDomElement child = nodeRecv.firstChildElement("vCard")
+                              .firstChildElement();
 
-  if (!child.isNull()) {
-    child = child.firstChildElement();
-    while (!child.isNull()) {
-      QString elementName = child.tagName();
-      if (elementName == this->_extraElementName) {
-        QDomElement extraChild = child.firstChildElement();
-        while (!extraChild.isNull()) {
-          QString keyName = extraChild.tagName();
-          QString value = extraChild.text();
-          this->_extraData.insert(keyName, value);
+  while (!child.isNull()) {
+    QString elementName = child.tagName();
+    if (elementName == this->_extraElementName) {
+      QDomElement extraChild = child.firstChildElement();
+      while (!extraChild.isNull()) {
+        QString keyName = extraChild.tagName();
+        QString value = extraChild.text();
+        this->_extraData.insert(keyName, value);
 
-          extraChild = extraChild.nextSiblingElement();
-        }
+        extraChild = extraChild.nextSiblingElement();
       }
-      child = child.nextSiblingElement();
     }
+
+    child = child.nextSiblingElement();
   }
+
 }
 
 void QmlQXmppVCard::toXmlElementFromChild(QXmlStreamWriter *writer) const
