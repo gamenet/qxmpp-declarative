@@ -24,31 +24,39 @@
 
 #pragma once
 
-#include <QtCore/QList>
-
 #include <QXmppVCardManager.h>
+
 #include <QmlQXmppVCard.h>
 
-class QmlQXmppVCardManager : public QObject
+class QmlQXmppVCardManager : public QXmppVCardManager
 {
   Q_OBJECT
 
 public:
-  QmlQXmppVCardManager(QXmppVCardManager *vcardMgr = 0, QObject *parent = 0);
+  QmlQXmppVCardManager();
   ~QmlQXmppVCardManager();
 
-public slots:
-  void requestVCard(const QString& jid);
+  Q_INVOKABLE QString requestVCard(const QString& bareJid = QString());
 
-private slots:
-  void onVCardReceived(const QXmppVCardIq& vcardIq); 
+  Q_INVOKABLE const QmlQXmppVCard& clientVCard() const;
+  Q_INVOKABLE void setClientVCard(const QmlQXmppVCard&);
+
+  Q_INVOKABLE QString requestClientVCard();
+  Q_INVOKABLE bool isClientVCardReceived() const;
+
+  bool handleStanza(const QDomElement &element) override;
 
 signals:
+  /// This signal is emitted when the requested vCard is received
+  /// after calling the requestVCard() function.
   void vCardReceived(QmlQXmppVCard *vcard);
 
-private:
-  void connectSignals();
+  /// This signal is emitted when the client's vCard is received
+  /// after calling the requestClientVCard() function.
+  void clientVCardReceived();
 
 private:
-  QXmppVCardManager *_vcardManager;
+  QmlQXmppVCard _clientVCard;
+  bool _isClientVCardReceived;
+  QStringList _customElements;
 };

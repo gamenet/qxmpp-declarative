@@ -36,6 +36,7 @@
 #include <QmlQXmppArchiveManager.h>
 #include <QmlQXmppRosterManager.h>
 #include <QmlQXmppVCardManager.h>
+#include <QmlQXmppVCard.h>
 
 void QmlQXmppPlugin::registerTypes(const char *uri)
 {

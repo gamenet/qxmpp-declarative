@@ -36,6 +36,7 @@ class QmlQXmppPresence : public QObject
 
 public:
   QmlQXmppPresence(const QXmppPresence &xmppPresence, QObject *parent = 0);
+  QmlQXmppPresence(const QmlQXmppPresence &p);
   ~QmlQXmppPresence();
 
   QString from() const;

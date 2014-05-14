@@ -30,6 +30,11 @@ QmlQXmppPresence::QmlQXmppPresence(const QXmppPresence &xmppPresence, QObject *p
 {
 }
 
+QmlQXmppPresence::QmlQXmppPresence(const QmlQXmppPresence &p)
+  : _presence(p._presence)
+{
+}
+
 QmlQXmppPresence::~QmlQXmppPresence()
 {
 }

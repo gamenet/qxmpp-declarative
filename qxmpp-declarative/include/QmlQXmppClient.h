@@ -34,7 +34,6 @@ class QmlQXmppConfiguration;
 class QmlQXmppArchiveManager;
 class QmlQXmppRosterManager;
 class QmlQXmppVCardManager;
-
 class QXmppArchiveManager;
 
 class QmlQXmppClient : public QObject

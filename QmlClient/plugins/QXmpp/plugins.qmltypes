@@ -3,9 +3,11 @@ import QtQuick.tooling 1.1
 // This file describes the plugin-supplied types contained in the library.
 // It is used for QML tooling purposes only.
 //
-// This file was auto-generated with the command 'D:\SDK.cpp\Qt5.2.1_VS2010\5.2.1\msvc2010\bin\qml1plugindump.EXE -path ./'.
+// This file was auto-generated with the command 'D:\SDK.cpp\Qt5.2.1_VS2010\5.2.1\msvc2010\bin\qml1plugindump.EXE -path ./plugins/QXmpp'.
 
 Module {
+    Component { name: "QXmppClientExtension"; prototype: "QXmppLoggable" }
+    Component { name: "QXmppLoggable"; prototype: "QObject" }
     Component {
         name: "QXmppLogger"
         prototype: "QObject"
@@ -64,6 +66,7 @@ Module {
         }
         Method { name: "reopen" }
     }
+    Component { name: "QXmppVCardManager"; prototype: "QXmppClientExtension" }
     Component {
         name: "QmlQXmppArchiveManager"
         prototype: "QObject"
@@ -75,6 +78,12 @@ Module {
         prototype: "QObject"
         exports: ["QXmpp/QXmppClient 1.0"]
         exportMetaObjectRevisions: [0]
+        Property {
+            name: "configuration"
+            type: "QmlQXmppConfiguration"
+            isReadonly: true
+            isPointer: true
+        }
         Property {
             name: "archiveManager"
             type: "QmlQXmppArchiveManager"
@@ -90,6 +99,7 @@ Module {
         Property { name: "vcardManager"; type: "QmlQXmppVCardManager"; isReadonly: true; isPointer: true }
         Property { name: "statusType"; type: "string" }
         Property { name: "statusText"; type: "string" }
+        Method { name: "connectUsingConfiguration" }
         Method {
             name: "connectToServer"
             Parameter { name: "jid"; type: "string" }
@@ -101,6 +111,23 @@ Module {
             Parameter { name: "bareJid"; type: "string" }
             Parameter { name: "message"; type: "string" }
         }
+    }
+    Component {
+        name: "QmlQXmppConfiguration"
+        prototype: "QObject"
+        exports: ["QXmpp/QXmppConfiguration 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "host"; type: "string" }
+        Property { name: "domain"; type: "string" }
+        Property { name: "port"; type: "int" }
+        Property { name: "user"; type: "string" }
+        Property { name: "password"; type: "string" }
+        Property { name: "resource"; type: "string" }
+        Property { name: "jid"; type: "string" }
+        Property { name: "autoAcceptSubscriptions"; type: "bool" }
+        Property { name: "autoReconnectionEnabled"; type: "bool" }
+        Property { name: "keepAliveInterval"; type: "int" }
+        Property { name: "keepAliveTimeout"; type: "int" }
     }
     Component {
         name: "QmlQXmppPresence"
@@ -234,28 +261,38 @@ Module {
     Component {
         name: "QmlQXmppVCard"
         prototype: "QObject"
-        exports: ["QXmpp/QXmppVCard 1.0"]
-        exportMetaObjectRevisions: [0]
-        Property { name: "from"; type: "string"; isReadonly: true }
-        Property { name: "birthday"; type: "QDate"; isReadonly: true }
-        Property { name: "description"; type: "string"; isReadonly: true }
-        Property { name: "email"; type: "string"; isReadonly: true }
-        Property { name: "firstName"; type: "string"; isReadonly: true }
-        Property { name: "fullName"; type: "string"; isReadonly: true }
-        Property { name: "lastName"; type: "string"; isReadonly: true }
-        Property { name: "middleName"; type: "string"; isReadonly: true }
-        Property { name: "nickName"; type: "string"; isReadonly: true }
-        Property { name: "url"; type: "string"; isReadonly: true }
+        exports: ["QXmpp/QXmppVCard 1.0", "QXmpp/QXmppVCardEx 1.0"]
+        exportMetaObjectRevisions: [0, 0]
+        Property { name: "from"; type: "string" }
+        Property { name: "birthday"; type: "QDate" }
+        Property { name: "description"; type: "string" }
+        Property { name: "email"; type: "string" }
+        Property { name: "firstName"; type: "string" }
+        Property { name: "fullName"; type: "string" }
+        Property { name: "lastName"; type: "string" }
+        Property { name: "middleName"; type: "string" }
+        Property { name: "nickName"; type: "string" }
+        Property { name: "url"; type: "string" }
+        Property { name: "extra"; type: "QVariantMap" }
     }
     Component {
         name: "QmlQXmppVCardManager"
-        prototype: "QObject"
+        prototype: "QXmppVCardManager"
         exports: ["QXmpp/QXmppVCardManager 1.0"]
         exportMetaObjectRevisions: [0]
         Method {
             name: "requestVCard"
-            Parameter { name: "jid"; type: "string" }
+            type: "string"
+            Parameter { name: "bareJid"; type: "string" }
         }
+        Method { name: "requestVCard"; type: "string" }
+        Method { name: "clientVCard" }
+        Method {
+            name: "setClientVCard"
+            Parameter { type: "QmlQXmppVCard" }
+        }
+        Method { name: "requestClientVCard"; type: "string" }
+        Method { name: "isClientVCardReceived"; type: "bool" }
     }
     Component { name: "QEasingCurve"; prototype: "QDeclarativeEasingValueType" }
 }
