@@ -26,7 +26,6 @@
 
 #include <QXmppVCardIq.h>
 #include <QDomElement>
-#include <QMap>
 #include <QVariant>
 
 class QmlQXmppVCard : public QObject, public QXmppVCardIq
@@ -45,7 +44,7 @@ class QmlQXmppVCard : public QObject, public QXmppVCardIq
   Q_PROPERTY(QVariantMap extra READ extra WRITE setExtra)
 
 public:
-  QmlQXmppVCard(const QStringList &customElements = QStringList());
+  QmlQXmppVCard(const QString &elementName = QString("EXTRA"));
   QmlQXmppVCard(const QmlQXmppVCard &p);
   ~QmlQXmppVCard();
 
@@ -54,14 +53,14 @@ public:
   void setExtra(const QVariantMap &map);
   QVariantMap extra() const;
 
-  void setCustomElements(const QStringList &customElements);
-  QStringList customElements() const;
+  void setExtraElementName(const QString &elementName);
+  QString extraElementName() const;
 
 protected:
   void parseElementFromChild(const QDomElement&);
   void toXmlElementFromChild(QXmlStreamWriter *writer) const;
 
 private:
-  QStringList _customElements;
+  QString _extraElementName;
   QVariantMap _extraData;
 };
