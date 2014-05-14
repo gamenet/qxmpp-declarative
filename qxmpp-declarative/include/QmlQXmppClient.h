@@ -95,7 +95,7 @@ signals:
   void messageReceived(QString from, QString message);
 
   //  This signal is emitted when client presence type changes.
-  void presenceReceived(const QmlQXmppPresence &presence);
+  void presenceReceived(QmlQXmppPresence *presence);
 
   //  This signal is emitted when client status type changes.
   void statusTypeChanged(const QString &type);

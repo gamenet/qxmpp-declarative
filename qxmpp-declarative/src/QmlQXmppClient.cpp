@@ -165,10 +165,7 @@ void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
 void QmlQXmppClient::onPresenceReceived(const QXmppPresence &presence)
 {
   QmlQXmppPresence presenceWrapper(presence);
-  //qDebug() << "ObjectOwnership before: " << QQmlEngine::objectOwnership(presenceWrapper);
-  //QQmlEngine::setObjectOwnership(presenceWrapper, QQmlEngine::JavaScriptOwnership);
-  //qDebug() << "ObjectOwnership after: " << QQmlEngine::objectOwnership(presenceWrapper);
-  emit presenceReceived(presenceWrapper);
+  emit presenceReceived(&presenceWrapper);
 }
 
 void QmlQXmppClient::connectSignals()
