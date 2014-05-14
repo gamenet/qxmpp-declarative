@@ -36,7 +36,7 @@ public:
   QmlQXmppVCardManager();
   ~QmlQXmppVCardManager();
 
-  Q_INVOKABLE QString requestVCard(const QString& bareJid = "");
+  Q_INVOKABLE QString requestVCard(const QString& bareJid = QString());
 
   Q_INVOKABLE const QmlQXmppVCard& clientVCard() const;
   Q_INVOKABLE void setClientVCard(const QmlQXmppVCard&);
@@ -44,7 +44,7 @@ public:
   Q_INVOKABLE QString requestClientVCard();
   Q_INVOKABLE bool isClientVCardReceived() const;
 
-  bool handleStanza(const QDomElement &element);
+  bool handleStanza(const QDomElement &element) override;
 
 signals:
   /// This signal is emitted when the requested vCard is received

@@ -46,11 +46,10 @@ QmlQXmppVCardManager::~QmlQXmppVCardManager()
 QString QmlQXmppVCardManager::requestVCard(const QString& jid)
 {
   QXmppVCardIq request(jid);
-  if (client()->sendPacket(request)) {
+  if (client()->sendPacket(request)) 
     return request.id();
-  } else {
-    return QString();
-  }
+  
+  return QString();
 }
 
 /// Returns the vCard of the connected client.
@@ -80,7 +79,7 @@ void QmlQXmppVCardManager::setClientVCard(const QmlQXmppVCard& clientVCard)
 /// can be get using clientVCard().
 QString QmlQXmppVCardManager::requestClientVCard()
 {
-  return requestVCard();
+  return this->requestVCard();
 }
 
 /// Returns true if vCard of the connected client has been
@@ -95,8 +94,7 @@ bool QmlQXmppVCardManager::isClientVCardReceived() const
 
 bool QmlQXmppVCardManager::handleStanza(const QDomElement &element)
 {
-  if(element.tagName() == "iq" && QXmppVCardIq::isVCard(element))
-  {
+  if (element.tagName() == "iq" && QXmppVCardIq::isVCard(element)) {
     QmlQXmppVCard vCardIq;
     vCardIq.parse(element);
 
@@ -105,7 +103,8 @@ bool QmlQXmppVCardManager::handleStanza(const QDomElement &element)
       this->_isClientVCardReceived = true;
       emit clientVCardReceived();
     }
-    emit vCardReceived(&vCardIq);
+
+    emit this->vCardReceived(&vCardIq);
     
     return true;
   }

@@ -23,7 +23,6 @@
  */
 
 #include <QtDeclarative/QDeclarativeEngine>
-#include <QtQml/QQmlEngine>
 
 #include <QXmppMessage.h>
 #include <QXmppPresence.h>
@@ -51,7 +50,7 @@ QmlQXmppClient::QmlQXmppClient(QObject *parent)
 QmlQXmppClient::~QmlQXmppClient()
 {
 }
-//
+
 QmlQXmppConfiguration *QmlQXmppClient::configuration()
 {
   if (!this->_configurationWrapper) {
@@ -98,11 +97,10 @@ QmlQXmppVCardManager *QmlQXmppClient::vcardManager()
 
 QString QmlQXmppClient::clientStatusType()
 {
-  if (this->_client.clientPresence().type() == QXmppPresence::Available) {
+  if (this->_client.clientPresence().type() == QXmppPresence::Available)
     return QmlQXmppPresence::statusToString(this->_client.clientPresence().availableStatusType());
-  } else {
-    return "offline";
-  }
+  
+  return "offline";
 }
 
 void QmlQXmppClient::setClientStatusType(const QString &value)
@@ -117,7 +115,7 @@ void QmlQXmppClient::setClientStatusType(const QString &value)
     }
     this->_client.setClientPresence(presence);
 
-    emit statusTypeChanged(value);
+    emit this->statusTypeChanged(value);
   }
 }
 
@@ -133,7 +131,7 @@ void QmlQXmppClient::setClientStatusText(const QString &value)
     presence.setStatusText(value);
     this->_client.setClientPresence(presence);
 
-    emit statusTextChanged(value);
+    emit this->statusTextChanged(value);
   }
 }
 
@@ -165,7 +163,7 @@ void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
 void QmlQXmppClient::onPresenceReceived(const QXmppPresence &presence)
 {
   QmlQXmppPresence presenceWrapper(presence);
-  emit presenceReceived(&presenceWrapper);
+  emit this->presenceReceived(&presenceWrapper);
 }
 
 void QmlQXmppClient::connectSignals()

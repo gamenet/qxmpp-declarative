@@ -24,9 +24,9 @@
 
 #pragma once
 
+#include <QtCore/QVariant>
+#include <QtXml/QDomElement>
 #include <QXmppVCardIq.h>
-#include <QDomElement>
-#include <QVariant>
 
 class QmlQXmppVCard : public QObject, public QXmppVCardIq
 {

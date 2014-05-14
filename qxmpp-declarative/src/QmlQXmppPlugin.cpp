@@ -39,7 +39,6 @@
 
 void QmlQXmppPlugin::registerTypes(const char *uri)
 {
-  qmlRegisterType<QmlQXmppVCard>("QXmpp", 1, 0, "QXmppVCardEx");
   qmlRegisterUncreatableType<QmlQXmppPresence>("QXmpp", 1, 0, "QXmppPresence", "Do not create QXmppPresence instances.");
   qmlRegisterType<QmlQXmppClient>("QXmpp", 1, 0, "QXmppClient");
   qmlRegisterUncreatableType<QmlQXmppConfiguration>("QXmpp", 1, 0, "QXmppConfiguration", "Do not create QXmppConfiguration instances.");
