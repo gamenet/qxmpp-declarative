@@ -151,9 +151,32 @@ void QmlQXmppClient::disconnectFromServer()
  this->_client.disconnectFromServer();
 }
 
-void QmlQXmppClient::sendMessage(const QString& bareJid, const QString& message)
+void QmlQXmppClient::sendMessage(const QString& bareJid, QVariantMap map)
 {
- this->_client.sendMessage(bareJid, message);
+  QXmppMessage msg;
+
+  if (map.contains(QString("body")))
+    msg.setBody(map["body"].toString());
+  
+  if (map.contains(QString("type")))
+    msg.setType(QmlQXmppMessage::parseMessageType(map["type"].toInt()));
+
+  if (map.contains(QString("state")))
+    msg.setState(QmlQXmppMessage::parseMessageState(map["state"].toInt()));
+
+  if (map.contains(QString("attentionRequest")))
+    msg.setAttentionRequested(map["attentionRequest"].toBool());
+  
+  QStringList resources = this->_client.rosterManager().getResources(bareJid);
+  if (!resources.isEmpty()) {
+    for (int i = 0; i < resources.size(); ++i) {
+      msg.setTo(bareJid + "/" + resources.at(i));
+      this->_client.sendPacket(msg);
+    }
+  } else {
+    msg.setTo(bareJid);
+    this->_client.sendPacket(msg);
+  }
 }
 
 void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)

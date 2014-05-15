@@ -97,6 +97,9 @@ public:
     QString lang() const;
     QXmppStanza::Error error() const;
 
+    static QXmppMessage::Type parseMessageType(int type);
+    static QXmppMessage::State parseMessageState(int state);
+
 private:
     QXmppMessage _message;
 };
