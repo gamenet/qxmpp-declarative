@@ -133,3 +133,40 @@ QXmppStanza::Error QmlQXmppMessage::error() const
 {
     return this->_message.error();
 }
+
+QXmppMessage::Type QmlQXmppMessage::parseMessageType(int type) {
+  switch (type) {
+  case QXmppMessage::Error:
+    return QXmppMessage::Error;
+  case QXmppMessage::Normal:
+    return QXmppMessage::Normal;
+  case QXmppMessage::Chat:
+    return QXmppMessage::Chat;
+  case QXmppMessage::GroupChat:
+    return QXmppMessage::GroupChat;
+  case QXmppMessage::Headline:
+    return QXmppMessage::Headline;
+  default:
+    return QXmppMessage::Error;
+  };
+}
+
+QXmppMessage::State QmlQXmppMessage::parseMessageState(int state) {
+  switch (state) {
+  case QXmppMessage::None:
+    return QXmppMessage::None;
+  case QXmppMessage::Active:
+    return QXmppMessage::Active;
+  case QXmppMessage::Inactive:
+    return QXmppMessage::Inactive;
+  case QXmppMessage::Gone:
+    return QXmppMessage::Gone;
+  case QXmppMessage::Composing:
+    return QXmppMessage::Composing;
+  case QXmppMessage::Paused:
+    return QXmppMessage::Paused;
+  default:
+    return QXmppMessage::None;
+  }
+}
+

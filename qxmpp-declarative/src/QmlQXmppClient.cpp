@@ -155,60 +155,18 @@ void QmlQXmppClient::sendMessage(const QString& bareJid, QVariantMap map)
 {
   QXmppMessage msg;
 
-  if (map.contains(QString("body"))) {
+  if (map.contains(QString("body")))
     msg.setBody(map["body"].toString());
-  }
+  
+  if (map.contains(QString("type")))
+    msg.setType(QmlQXmppMessage::parseMessageType(map["type"].toInt()));
 
-  if (map.contains(QString("type"))) {
-    int type = map["type"].toInt();
-    switch (type) {
-    case QXmppMessage::Error:
-      msg.setType(QXmppMessage::Error);
-      break;
-    case QXmppMessage::Normal:
-      msg.setType(QXmppMessage::Normal);
-      break;
-    case QXmppMessage::Chat:
-      msg.setType(QXmppMessage::Chat);
-      break;
-    case QXmppMessage::GroupChat:
-      msg.setType(QXmppMessage::GroupChat);
-      break;
-    case QXmppMessage::Headline:
-      msg.setType(QXmppMessage::Headline);
-      break;
-    };
-  }
+  if (map.contains(QString("state")))
+    msg.setState(QmlQXmppMessage::parseMessageState(map["state"].toInt()));
 
-  if (map.contains(QString("state"))) {
-    int state = map["state"].toInt();
-    switch (state) {
-    case QXmppMessage::None:
-      msg.setState(QXmppMessage::None);
-      break; 
-    case QXmppMessage::Active:
-      msg.setState(QXmppMessage::Active);
-      break;
-    case QXmppMessage::Inactive:
-      msg.setState(QXmppMessage::Inactive);
-      break;
-    case QXmppMessage::Gone:
-      msg.setState(QXmppMessage::Gone);
-      break;
-    case QXmppMessage::Composing:
-      msg.setState(QXmppMessage::Composing);
-      break;
-    case QXmppMessage::Paused:
-      msg.setState(QXmppMessage::Paused);
-      break;
-    }
-  }
-
-  if (map.contains(QString("attentionRequest"))) {
-    bool attentionRequested = map["attentionRequest"].toBool();
-    msg.setAttentionRequested(attentionRequested);
-  }
-
+  if (map.contains(QString("attentionRequest")))
+    msg.setAttentionRequested(map["attentionRequest"].toBool());
+  
   QStringList resources = this->_client.rosterManager().getResources(bareJid);
   if (!resources.isEmpty()) {
     for (int i = 0; i < resources.size(); ++i) {
