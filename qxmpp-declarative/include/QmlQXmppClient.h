@@ -54,7 +54,7 @@ public:
   QmlQXmppArchiveManager *archiveManager();
   QmlQXmppRosterManager *rosterManager();
   QmlQXmppVCardManager* vcardManager();
-
+  
   QString clientStatusType();
   void setClientStatusType(const QString &value);
 
@@ -108,7 +108,7 @@ public slots:
   void connectUsingConfiguration();
   void connectToServer(const QString &jid, const QString &password);
   void disconnectFromServer();
-  void sendMessage(const QString& bareJid, const QString& message);
+  void sendMessage(const QString& bareJid, QVariantMap map);
 
 private slots:
   void onMessageReceived(const QXmppMessage& message);
