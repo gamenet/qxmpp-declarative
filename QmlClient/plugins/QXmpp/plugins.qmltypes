@@ -78,6 +78,17 @@ Module {
         prototype: "QObject"
         exports: ["QXmpp/QXmppClient 1.0"]
         exportMetaObjectRevisions: [0]
+        Enum {
+            name: "StatusType"
+            values: {
+                "Online": 0,
+                "Away": 1,
+                "XA": 2,
+                "DND": 3,
+                "Chat": 4,
+                "Invisible": 5
+            }
+        }
         Property {
             name: "configuration"
             type: "QmlQXmppConfiguration"
@@ -97,8 +108,8 @@ Module {
             isPointer: true
         }
         Property { name: "vcardManager"; type: "QmlQXmppVCardManager"; isReadonly: true; isPointer: true }
-        Property { name: "statusType"; type: "string" }
-        Property { name: "statusText"; type: "string" }
+        Property { name: "clientStatusType"; type: "StatusType"; isReadonly: true }
+        Property { name: "clientStatusText"; type: "string"; isReadonly: true }
         Method { name: "connectUsingConfiguration" }
         Method {
             name: "connectToServer"
@@ -109,7 +120,11 @@ Module {
         Method {
             name: "sendMessage"
             Parameter { name: "bareJid"; type: "string" }
-            Parameter { name: "message"; type: "string" }
+            Parameter { name: "map"; type: "QVariantMap" }
+        }
+        Method {
+            name: "setClientPresence"
+            Parameter { name: "map"; type: "QVariantMap" }
         }
     }
     Component {
@@ -128,6 +143,50 @@ Module {
         Property { name: "autoReconnectionEnabled"; type: "bool" }
         Property { name: "keepAliveInterval"; type: "int" }
         Property { name: "keepAliveTimeout"; type: "int" }
+    }
+    Component {
+        name: "QmlQXmppMessage"
+        prototype: "QObject"
+        exports: ["QXmpp/QXmppMessage 1.0"]
+        exportMetaObjectRevisions: [0]
+        Enum {
+            name: "Type"
+            values: {
+                "Error": 0,
+                "Normal": 1,
+                "Chat": 2,
+                "GroupChat": 3,
+                "Headline": 4
+            }
+        }
+        Enum {
+            name: "State"
+            values: {
+                "None": 0,
+                "Active": 1,
+                "Inactive": 2,
+                "Gone": 3,
+                "Composing": 4,
+                "Paused": 5
+            }
+        }
+        Property { name: "body"; type: "string"; isReadonly: true }
+        Property { name: "isAttentionRequested"; type: "bool"; isReadonly: true }
+        Property { name: "isReceiptRequested"; type: "bool"; isReadonly: true }
+        Property { name: "mucInvitationJid"; type: "string"; isReadonly: true }
+        Property { name: "mucInvitationPassword"; type: "string"; isReadonly: true }
+        Property { name: "mucInvitationReason"; type: "string"; isReadonly: true }
+        Property { name: "receiptId"; type: "string"; isReadonly: true }
+        Property { name: "stamp"; type: "QDateTime"; isReadonly: true }
+        Property { name: "subject"; type: "string"; isReadonly: true }
+        Property { name: "thread"; type: "string"; isReadonly: true }
+        Property { name: "xhtml"; type: "string"; isReadonly: true }
+        Property { name: "state"; type: "QmlQXmppMessage::State"; isReadonly: true }
+        Property { name: "type"; type: "QmlQXmppMessage::Type"; isReadonly: true }
+        Property { name: "to"; type: "string"; isReadonly: true }
+        Property { name: "from"; type: "string"; isReadonly: true }
+        Property { name: "id"; type: "string"; isReadonly: true }
+        Property { name: "lang"; type: "string"; isReadonly: true }
     }
     Component {
         name: "QmlQXmppPresence"
@@ -261,8 +320,8 @@ Module {
     Component {
         name: "QmlQXmppVCard"
         prototype: "QObject"
-        exports: ["QXmpp/QXmppVCard 1.0", "QXmpp/QXmppVCardEx 1.0"]
-        exportMetaObjectRevisions: [0, 0]
+        exports: ["QXmpp/QXmppVCard 1.0"]
+        exportMetaObjectRevisions: [0]
         Property { name: "from"; type: "string" }
         Property { name: "birthday"; type: "QDate" }
         Property { name: "description"; type: "string" }
