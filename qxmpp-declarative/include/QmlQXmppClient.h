@@ -39,14 +39,24 @@ class QXmppArchiveManager;
 class QmlQXmppClient : public QObject
 {
   Q_OBJECT
+  Q_ENUMS(StatusType)
   Q_PROPERTY(QmlQXmppConfiguration *configuration READ configuration CONSTANT)
   Q_PROPERTY(QmlQXmppArchiveManager* archiveManager READ archiveManager CONSTANT)
   Q_PROPERTY(QmlQXmppRosterManager* rosterManager READ rosterManager CONSTANT)
   Q_PROPERTY(QmlQXmppVCardManager* vcardManager READ vcardManager CONSTANT)
-  Q_PROPERTY(QString statusType READ clientStatusType WRITE setClientStatusType NOTIFY statusTypeChanged)
-  Q_PROPERTY(QString statusText READ clientStatusText WRITE setClientStatusText NOTIFY statusTextChanged)
+  Q_PROPERTY(StatusType clientStatusType READ clientStatusType NOTIFY clientStatusTypeChanged)
+  Q_PROPERTY(QString clientStatusText READ clientStatusText NOTIFY clientStatusTextChanged)
 
 public:
+  enum StatusType {
+    Online = QXmppPresence::Online,
+    Away,
+    XA,
+    DND,
+    Chat,
+    Invisible 
+  };
+
   QmlQXmppClient(QObject *parent = 0);
   ~QmlQXmppClient();
 
@@ -55,8 +65,7 @@ public:
   QmlQXmppRosterManager *rosterManager();
   QmlQXmppVCardManager* vcardManager();
   
-  QString clientStatusType();
-  void setClientStatusType(const QString &value);
+  StatusType clientStatusType();
 
   QString clientStatusText();
   void setClientStatusText(const QString &value);
@@ -94,14 +103,14 @@ signals:
 
   void messageReceived(QmlQXmppMessage* message);
 
-  //  This signal is emitted when client presence type changes.
+  //  This signal is emitted when presence stanza received
   void presenceReceived(QmlQXmppPresence *presence);
 
   //  This signal is emitted when client status type changes.
-  void statusTypeChanged(const QString &type);
+  void clientStatusTypeChanged();
 
   //  This signal is emitted when client status text changes.
-  void statusTextChanged(const QString &text);
+  void clientStatusTextChanged();
 
 public slots:
   //  connect using QXmppConfiguration params
@@ -109,6 +118,7 @@ public slots:
   void connectToServer(const QString &jid, const QString &password);
   void disconnectFromServer();
   void sendMessage(const QString& bareJid, QVariantMap map);
+  void setClientPresence(QVariantMap map);
 
 private slots:
   void onMessageReceived(const QXmppMessage& message);
@@ -116,6 +126,8 @@ private slots:
 
 private:
   void connectSignals();
+  QXmppPresence::AvailableStatusType intToAvailableStatusType(int value);
+  StatusType availableStatusTypeToStatusType(QXmppPresence::AvailableStatusType type);
 
 private:
   QXmppClient _client;

@@ -24,6 +24,7 @@
 
 #include <QtDeclarative/QDeclarativeEngine>
 
+#include <QXmppUtils.h>
 #include <QXmppMessage.h>
 #include <QXmppPresence.h>
 #include <QXmppArchiveManager.h>
@@ -96,44 +97,14 @@ QmlQXmppVCardManager *QmlQXmppClient::vcardManager()
   return this->_vcardManagerWrapper;
 }
 
-QString QmlQXmppClient::clientStatusType()
+QmlQXmppClient::StatusType QmlQXmppClient::clientStatusType()
 {
-  if (this->_client.clientPresence().type() == QXmppPresence::Available)
-    return QmlQXmppPresence::statusToString(this->_client.clientPresence().availableStatusType());
-  
-  return "offline";
-}
-
-void QmlQXmppClient::setClientStatusType(const QString &value)
-{
-  if (value != this->clientStatusType()) {
-    QXmppPresence presence = this->_client.clientPresence();
-    if (value == "offline") {
-      presence.setType(QXmppPresence::Unavailable);
-    } else {
-      presence.setType(QXmppPresence::Available);
-      presence.setAvailableStatusType(QmlQXmppPresence::stringToStatus(value));
-    }
-    this->_client.setClientPresence(presence);
-
-    emit this->statusTypeChanged(value);
-  }
+  return this->availableStatusTypeToStatusType(this->_client.clientPresence().availableStatusType());
 }
 
 QString QmlQXmppClient::clientStatusText()
 {
   return this->_client.clientPresence().statusText();
-}
-
-void QmlQXmppClient::setClientStatusText(const QString &value)
-{
-  if (value != this->clientStatusText()) {
-    QXmppPresence presence = this->_client.clientPresence();
-    presence.setStatusText(value);
-    this->_client.setClientPresence(presence);
-
-    emit this->statusTextChanged(value);
-  }
 }
 
 void QmlQXmppClient::connectUsingConfiguration()
@@ -179,6 +150,31 @@ void QmlQXmppClient::sendMessage(const QString& bareJid, QVariantMap map)
   }
 }
 
+void QmlQXmppClient::setClientPresence(QVariantMap map)
+{
+  bool anythingChanged = false;
+  QXmppPresence presence = this->_client.clientPresence();
+  
+  if (map.contains(QString("type"))) {
+    QXmppPresence::AvailableStatusType newType = intToAvailableStatusType(map["type"].toInt());
+    if (newType != presence.availableStatusType()) {
+        presence.setAvailableStatusType(newType);
+        anythingChanged = true;
+    }
+  }
+
+  if (map.contains(QString("text"))) {
+    QString newStatus = map["text"].toString();
+    if (newStatus != presence.statusText()) {
+      presence.setStatusText(newStatus);
+      anythingChanged = true;
+    }
+  }
+
+  if (anythingChanged) 
+    this->_client.setClientPresence(presence);
+}
+
 void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
 {
   QmlQXmppMessage qmlmessage(message);
@@ -187,6 +183,11 @@ void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
 
 void QmlQXmppClient::onPresenceReceived(const QXmppPresence &presence)
 {
+  if (QXmppUtils::jidToBareJid(presence.from()) == this->_client.configuration().jidBare()) {
+    emit this->clientStatusTypeChanged();
+    emit this->clientStatusTextChanged();
+  }
+
   QmlQXmppPresence presenceWrapper(presence);
   emit this->presenceReceived(&presenceWrapper);
 }
@@ -198,4 +199,42 @@ void QmlQXmppClient::connectSignals()
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(disconnected()), this, SIGNAL(disconnected())));
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(messageReceived(const QXmppMessage &)), this, SLOT(onMessageReceived(const QXmppMessage &))));
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(presenceReceived(const QXmppPresence &)), this, SLOT(onPresenceReceived(const QXmppPresence &))));
+}
+
+QXmppPresence::AvailableStatusType QmlQXmppClient::intToAvailableStatusType(int value)
+{
+  switch (value) {
+  case QmlQXmppClient::Online:
+    return QXmppPresence::Online;
+  case QmlQXmppClient::Away:
+    return QXmppPresence::Away;
+  case QmlQXmppClient::XA:
+    return QXmppPresence::XA;
+  case QmlQXmppClient::DND:
+    return QXmppPresence::DND;
+  case QmlQXmppClient::Chat:
+    return QXmppPresence::Chat;
+  case QmlQXmppClient::Invisible:
+    return QXmppPresence::Invisible;
+  }
+  return QXmppPresence::Online;
+}
+
+QmlQXmppClient::StatusType QmlQXmppClient::availableStatusTypeToStatusType(QXmppPresence::AvailableStatusType type)
+{
+  switch (type) {
+  case QXmppPresence::Online:
+    return QmlQXmppClient::Online;
+  case QXmppPresence::Away:
+    return QmlQXmppClient::Away;
+  case QXmppPresence::XA:
+    return QmlQXmppClient::XA;
+  case QXmppPresence::DND:
+    return QmlQXmppClient::DND;
+  case QXmppPresence::Chat:
+    return QmlQXmppClient::Chat;
+  case QXmppPresence::Invisible:
+    return QmlQXmppClient::Invisible;
+  }
+  return QmlQXmppClient::Online;
 }
