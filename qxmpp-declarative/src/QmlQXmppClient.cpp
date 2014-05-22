@@ -24,6 +24,7 @@
 
 #include <QtDeclarative/QDeclarativeEngine>
 
+#include <QXmppUtils.h>
 #include <QXmppMessage.h>
 #include <QXmppPresence.h>
 #include <QXmppArchiveManager.h>
@@ -153,14 +154,12 @@ void QmlQXmppClient::setClientPresence(QVariantMap map)
 {
   bool anythingChanged = false;
   QXmppPresence presence = this->_client.clientPresence();
-  QXmppPresence::AvailableStatusType oldAvailableStatusType = presence.availableStatusType();
-
+  
   if (map.contains(QString("type"))) {
     QXmppPresence::AvailableStatusType newType = intToAvailableStatusType(map["type"].toInt());
     if (newType != presence.availableStatusType()) {
         presence.setAvailableStatusType(newType);
         anythingChanged = true;
-        emit clientStatusTypeChanged();
     }
   }
 
@@ -169,7 +168,6 @@ void QmlQXmppClient::setClientPresence(QVariantMap map)
     if (newStatus != presence.statusText()) {
       presence.setStatusText(newStatus);
       anythingChanged = true;
-      emit clientStatusTextChanged();
     }
   }
 
@@ -185,6 +183,11 @@ void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
 
 void QmlQXmppClient::onPresenceReceived(const QXmppPresence &presence)
 {
+  if (QXmppUtils::jidToBareJid(presence.from()) == this->_client.configuration().jidBare()) {
+    emit this->clientStatusTypeChanged();
+    emit this->clientStatusTextChanged();
+  }
+
   QmlQXmppPresence presenceWrapper(presence);
   emit this->presenceReceived(&presenceWrapper);
 }
