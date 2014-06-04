@@ -40,6 +40,7 @@ class QmlQXmppClient : public QObject
 {
   Q_OBJECT
   Q_ENUMS(StatusType)
+  Q_ENUMS(Error)
   Q_PROPERTY(QmlQXmppConfiguration *configuration READ configuration CONSTANT)
   Q_PROPERTY(QmlQXmppArchiveManager* archiveManager READ archiveManager CONSTANT)
   Q_PROPERTY(QmlQXmppRosterManager* rosterManager READ rosterManager CONSTANT)
@@ -55,6 +56,13 @@ public:
     DND,
     Chat,
     Invisible 
+  };
+
+  enum Error {
+    NoError = QXmppClient::NoError,            ///< No error.
+    SocketError,        ///< Error due to TCP socket.
+    KeepAliveError,     ///< Error due to no response to a keep alive.
+    XmppStreamError,    ///< Error due to XML stream.
   };
 
   QmlQXmppClient(QObject *parent = 0);
@@ -99,7 +107,7 @@ signals:
   /// It could be due to TCP socket or the xml stream or the stanza.
   /// Depending upon the type of error occurred use the respective get function to
   /// know the error.
-  void error(QXmppClient::Error);
+  void error(QXmppClient::Error code);
 
   void messageReceived(QmlQXmppMessage* message);
 

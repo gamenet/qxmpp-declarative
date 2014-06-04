@@ -89,6 +89,15 @@ Module {
                 "Invisible": 5
             }
         }
+        Enum {
+            name: "Error"
+            values: {
+                "NoError": 0,
+                "SocketError": 1,
+                "KeepAliveError": 2,
+                "XmppStreamError": 3
+            }
+        }
         Property {
             name: "configuration"
             type: "QmlQXmppConfiguration"
