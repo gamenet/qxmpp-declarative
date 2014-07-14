@@ -17,7 +17,7 @@
     #define STRFILEVER       "1,0,0,0"
     #define STRPRODUCTVER    STRFILEVER
 
-    #define COMPANYNAME      "GGS"
+    #define COMPANYNAME      "GameNet"
     #define FILEDESCRIPTION  "QXmpp adapter library for using from within QML"
     #define INTERNALNAME     "qxmpp-declarative"
     #define LEGALCOPYRIGHT   "Copyright(c) 2014"
