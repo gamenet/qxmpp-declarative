@@ -107,7 +107,7 @@ signals:
   /// It could be due to TCP socket or the xml stream or the stanza.
   /// Depending upon the type of error occurred use the respective get function to
   /// know the error.
-  void error(QXmppClient::Error code);
+  void error(QmlQXmppClient::Error code);
 
   void messageReceived(QmlQXmppMessage* message);
 
