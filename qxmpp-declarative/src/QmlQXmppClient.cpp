@@ -175,6 +175,11 @@ void QmlQXmppClient::setClientPresence(QVariantMap map)
     this->_client.setClientPresence(presence);
 }
 
+void QmlQXmppClient::onError(QXmppClient::Error code)
+{
+  emit error(static_cast<int>(code));
+}
+
 void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
 {
   QmlQXmppMessage qmlmessage(message);
@@ -194,7 +199,7 @@ void QmlQXmppClient::onPresenceReceived(const QXmppPresence &presence)
 
 void QmlQXmppClient::connectSignals()
 {
-  SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(error(QXmppClient::Error)), this, SIGNAL(error(QXmppClient::Error))));
+  SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(error(QXmppClient::Error)), this, SLOT(onError(QXmppClient::Error))));
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(connected()), this, SIGNAL(connected())));
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(disconnected()), this, SIGNAL(disconnected())));
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(messageReceived(const QXmppMessage &)), this, SLOT(onMessageReceived(const QXmppMessage &))));
