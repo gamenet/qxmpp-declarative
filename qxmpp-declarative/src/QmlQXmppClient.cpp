@@ -29,6 +29,7 @@
 #include <QXmppPresence.h>
 #include <QXmppArchiveManager.h>
 #include <QXmppVCardManager.h>
+#include <QXmppLastActivityManager.h>
 
 #include <QmlQXmppPlugin_global.h>
 #include <QmlQXmppClient.h>
@@ -38,6 +39,7 @@
 #include <QmlQXmppArchiveManager.h>
 #include <QmlQXmppRosterManager.h>
 #include <QmlQXmppVCardManager.h>
+#include <QmlQXmppLastActivityManager.h>
 
 QmlQXmppClient::QmlQXmppClient(QObject *parent)
     : QObject(parent)
@@ -45,6 +47,7 @@ QmlQXmppClient::QmlQXmppClient(QObject *parent)
     , _archiveManagerWrapper(0)
     , _rosterManagerWrapper(0)
     , _vcardManagerWrapper(0)
+    , _lastActivityManagerWrapper(0)
 {
   connectSignals();
 }
@@ -93,8 +96,18 @@ QmlQXmppVCardManager *QmlQXmppClient::vcardManager()
     this->_vcardManagerWrapper = new QmlQXmppVCardManager;
     this->_client.addExtension(this->_vcardManagerWrapper);
   }
- 
+
   return this->_vcardManagerWrapper;
+}
+
+QmlQXmppLastActivityManager *QmlQXmppClient::lastActivityManager()
+{
+  if (!this->_lastActivityManagerWrapper) {
+    this->_lastActivityManagerWrapper = new QmlQXmppLastActivityManager;
+    this->_client.addExtension(this->_lastActivityManagerWrapper);
+  }
+
+  return this->_lastActivityManagerWrapper;
 }
 
 QmlQXmppClient::StatusType QmlQXmppClient::clientStatusType()
