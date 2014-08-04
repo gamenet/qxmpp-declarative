@@ -27,6 +27,7 @@ QmlQXmppLastActivity& QmlQXmppLastActivity::operator=(const QmlQXmppLastActivity
 
   this->_seconds = rhs._seconds;
   this->_status = rhs._status;
+  this->_from = rhs._from;
   return *this;
 }
 

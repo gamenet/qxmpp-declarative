@@ -41,8 +41,8 @@
 #include <QmlQXmppVCardManager.h>
 #include <QmlQXmppLastActivityManager.h>
 
-QmlQXmppClient::QmlQXmppClient(QObject *parent)
-    : QObject(parent)
+QmlQXmppClient::QmlQXmppClient(QDeclarativeItem *parent)
+    : QDeclarativeItem(parent)
     , _archiveManager(0)
     , _archiveManagerWrapper(0)
     , _rosterManagerWrapper(0)
