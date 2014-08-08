@@ -35,6 +35,8 @@ class QmlQXmppArchiveManager;
 class QmlQXmppRosterManager;
 class QmlQXmppVCardManager;
 class QmlQXmppLastActivityManager;
+class QmlQXmppPEPManager;
+
 class QXmppArchiveManager;
 
 class QmlQXmppClient : public QDeclarativeItem
@@ -47,6 +49,8 @@ class QmlQXmppClient : public QDeclarativeItem
   Q_PROPERTY(QmlQXmppRosterManager* rosterManager READ rosterManager CONSTANT)
   Q_PROPERTY(QmlQXmppVCardManager* vcardManager READ vcardManager CONSTANT)
   Q_PROPERTY(QmlQXmppLastActivityManager* lastActivityManager READ lastActivityManager CONSTANT)
+  Q_PROPERTY(QmlQXmppPEPManager* pepManager READ pepManager CONSTANT)
+
   Q_PROPERTY(StatusType clientStatusType READ clientStatusType NOTIFY clientStatusTypeChanged)
   Q_PROPERTY(QString clientStatusText READ clientStatusText NOTIFY clientStatusTextChanged)
 
@@ -75,6 +79,7 @@ public:
   QmlQXmppRosterManager *rosterManager();
   QmlQXmppVCardManager* vcardManager();
   QmlQXmppLastActivityManager* lastActivityManager();
+  QmlQXmppPEPManager *pepManager();
   
   StatusType clientStatusType();
 
@@ -150,6 +155,7 @@ private:
   QmlQXmppConfiguration *_configurationWrapper;
   QmlQXmppArchiveManager *_archiveManagerWrapper;
   QmlQXmppRosterManager *_rosterManagerWrapper;
-  QmlQXmppVCardManager* _vcardManagerWrapper;
-  QmlQXmppLastActivityManager* _lastActivityManagerWrapper;
+  QmlQXmppVCardManager *_vcardManagerWrapper;
+  QmlQXmppLastActivityManager *_lastActivityManagerWrapper;
+  QmlQXmppPEPManager *_pepManagerWrapper;
 };
