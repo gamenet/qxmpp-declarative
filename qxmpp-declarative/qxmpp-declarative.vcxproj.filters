@@ -140,6 +140,24 @@
     <ClCompile Include="GeneratedFiles\Release\moc_QmlQXmppLastActivity.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_QmlQXmppPEPManager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_QmlQXmppPEPManager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QmlQXmppGaming.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QmlQXmppPEPManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_QmlQXmppGaming.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_QmlQXmppGaming.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="qxmpp-declarative.rc" />
@@ -187,6 +205,12 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="include\QmlQXmppLastActivity.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="include\QmlQXmppPEPManager.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="include\QmlQXmppGaming.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

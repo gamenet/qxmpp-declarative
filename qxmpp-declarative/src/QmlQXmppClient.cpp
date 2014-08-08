@@ -40,6 +40,7 @@
 #include <QmlQXmppRosterManager.h>
 #include <QmlQXmppVCardManager.h>
 #include <QmlQXmppLastActivityManager.h>
+#include <QmlQXmppPEPManager.h>
 
 QmlQXmppClient::QmlQXmppClient(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
@@ -48,6 +49,7 @@ QmlQXmppClient::QmlQXmppClient(QDeclarativeItem *parent)
     , _rosterManagerWrapper(0)
     , _vcardManagerWrapper(0)
     , _lastActivityManagerWrapper(0)
+    , _pepManagerWrapper(0)
 {
   connectSignals();
 }
@@ -109,6 +111,16 @@ QmlQXmppLastActivityManager *QmlQXmppClient::lastActivityManager()
 
   return this->_lastActivityManagerWrapper;
 }
+
+
+QmlQXmppPEPManager * QmlQXmppClient::pepManager()
+{
+  if (!this->_pepManagerWrapper)
+    this->_pepManagerWrapper = new QmlQXmppPEPManager(&this->_client.pepManager(), this);
+
+  return this->_pepManagerWrapper;
+}
+
 
 QmlQXmppClient::StatusType QmlQXmppClient::clientStatusType()
 {
