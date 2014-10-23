@@ -117,6 +117,10 @@ signals:
   /// know the error.
   void error(int code);
 
+  //  This signal is emitted when "my" message from another resource received (see XEP-280 Message Carbons)
+  void carbonMessageReceived(QmlQXmppMessage* message);
+
+  //  This signal is emitted when new message from another jid is received
   void messageReceived(QmlQXmppMessage* message);
 
   //  This signal is emitted when presence stanza received
@@ -137,6 +141,7 @@ public slots:
   void setClientPresence(QVariantMap map);
 
 private slots:
+  void onConnected();
   void onError(QXmppClient::Error code);
   void onMessageReceived(const QXmppMessage& message);
   void onPresenceReceived(const QXmppPresence &presence);
