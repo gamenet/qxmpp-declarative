@@ -30,6 +30,7 @@
 #include <QXmppArchiveManager.h>
 #include <QXmppVCardManager.h>
 #include <QXmppLastActivityManager.h>
+#include <QXmppMessageCarbonsIq.h>
 
 #include <QmlQXmppPlugin_global.h>
 #include <QmlQXmppClient.h>
@@ -113,7 +114,7 @@ QmlQXmppLastActivityManager *QmlQXmppClient::lastActivityManager()
 }
 
 
-QmlQXmppPEPManager * QmlQXmppClient::pepManager()
+QmlQXmppPEPManager *QmlQXmppClient::pepManager()
 {
   if (!this->_pepManagerWrapper)
     this->_pepManagerWrapper = new QmlQXmppPEPManager(&this->_client.pepManager(), this);
@@ -200,6 +201,15 @@ void QmlQXmppClient::setClientPresence(QVariantMap map)
     this->_client.setClientPresence(presence);
 }
 
+void QmlQXmppClient::onConnected()
+{
+  //  activate XEP-280 Message Carbons capability
+  QXmppMessageCarbonsIq carbonIq;
+  this->_client.sendPacket(carbonIq);
+
+  emit this->connected();
+}
+
 void QmlQXmppClient::onError(QXmppClient::Error code)
 {
   emit error(static_cast<int>(code));
@@ -207,6 +217,12 @@ void QmlQXmppClient::onError(QXmppClient::Error code)
 
 void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
 {
+  if (message.hasMessageCarbon()) {
+    QmlQXmppMessage qmlmessage(message.carbonMessage());
+    emit carbonMessageReceived(&qmlmessage);
+    return;
+  }
+
   QmlQXmppMessage qmlmessage(message);
   emit messageReceived(&qmlmessage);
 }
@@ -225,7 +241,7 @@ void QmlQXmppClient::onPresenceReceived(const QXmppPresence &presence)
 void QmlQXmppClient::connectSignals()
 {
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(error(QXmppClient::Error)), this, SLOT(onError(QXmppClient::Error))));
-  SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(connected()), this, SIGNAL(connected())));
+  SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(connected()), this, SLOT(onConnected())));
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(disconnected()), this, SIGNAL(disconnected())));
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(messageReceived(const QXmppMessage &)), this, SLOT(onMessageReceived(const QXmppMessage &))));
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(presenceReceived(const QXmppPresence &)), this, SLOT(onPresenceReceived(const QXmppPresence &))));
