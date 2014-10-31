@@ -138,9 +138,16 @@ void QmlQXmppClient::connectUsingConfiguration()
   this->_client.connectToServer(this->_configuration);
 }
 
-void QmlQXmppClient::connectToServer(const QString &jid, const QString &password)
+void QmlQXmppClient::connectToServer(const QString &jid, const QString &password, const QVariantMap &options)
 {
- this->_client.connectToServer(jid, password);
+  QXmppConfiguration config;
+  config.setJid(jid);
+  config.setPassword(password);
+
+  if (options.contains(QString("resource")))
+    config.setResource(options["resource"].toString());
+
+  this->_client.connectToServer(config);
 }
 
 void QmlQXmppClient::disconnectFromServer()
