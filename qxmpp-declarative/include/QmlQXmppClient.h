@@ -132,6 +132,9 @@ signals:
   //  This signal is emitted when client status text changes.
   void clientStatusTextChanged();
 
+  // This signal is emited when stream resume
+  void streamManagementResumed(bool resumed);
+  
 public slots:
   //  connect using QXmppConfiguration params
   void connectUsingConfiguration();

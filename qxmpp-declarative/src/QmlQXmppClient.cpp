@@ -147,6 +147,9 @@ void QmlQXmppClient::connectToServer(const QString &jid, const QString &password
   if (options.contains(QString("resource")))
     config.setResource(options["resource"].toString());
 
+  if (options.contains(QString("streamManagementMode")))
+    config.setStreamManagementMode(static_cast<QXmppConfiguration::StreamManagementMode>(options["streamManagementMode"].toInt()));
+  
   this->_client.connectToServer(config);
 }
 
@@ -252,6 +255,7 @@ void QmlQXmppClient::connectSignals()
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(disconnected()), this, SIGNAL(disconnected())));
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(messageReceived(const QXmppMessage &)), this, SLOT(onMessageReceived(const QXmppMessage &))));
   SIGNAL_CONNECT_CHECK(connect(&this->_client, SIGNAL(presenceReceived(const QXmppPresence &)), this, SLOT(onPresenceReceived(const QXmppPresence &))));
+  QObject::connect(&this->_client, &QXmppClient::streamManagementResumed, this, &QmlQXmppClient::streamManagementResumed);
 }
 
 QXmppPresence::AvailableStatusType QmlQXmppClient::intToAvailableStatusType(int value)
