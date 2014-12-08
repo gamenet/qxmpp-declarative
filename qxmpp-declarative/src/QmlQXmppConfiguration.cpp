@@ -190,3 +190,13 @@ void QmlQXmppConfiguration::setKeepAliveTimeout(int value)
 
   this->_xmppConfiguration->setKeepAliveTimeout(value);
 }
+
+int QmlQXmppConfiguration::streamManagementMode() const
+{
+  return static_cast<int>(this->_xmppConfiguration->streamManagementMode());
+}
+
+void QmlQXmppConfiguration::setStreamManagementMode(int mode)
+{
+  this->_xmppConfiguration->setStreamManagementMode(static_cast<QXmppConfiguration::StreamManagementMode>(mode));
+}

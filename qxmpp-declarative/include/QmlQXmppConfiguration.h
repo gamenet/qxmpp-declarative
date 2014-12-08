@@ -42,6 +42,7 @@ class QmlQXmppConfiguration : public QObject
   Q_PROPERTY(bool autoReconnectionEnabled READ autoReconnectionEnabled WRITE setAutoReconnectionEnabled);
   Q_PROPERTY(int keepAliveInterval READ keepAliveInterval WRITE setKeepAliveInterval);
   Q_PROPERTY(int keepAliveTimeout READ keepAliveTimeout WRITE setKeepAliveTimeout);
+  Q_PROPERTY(int streamManagementMode READ streamManagementMode WRITE setStreamManagementMode);
 
 public:
   QmlQXmppConfiguration(QXmppConfiguration *configuration, QObject *parent = 0);
@@ -79,6 +80,9 @@ public:
 
   int keepAliveTimeout() const;
   void setKeepAliveTimeout(int secs);
+
+  int streamManagementMode() const;
+  void setStreamManagementMode(int mode);
 
 private:
   QXmppConfiguration *_xmppConfiguration;
