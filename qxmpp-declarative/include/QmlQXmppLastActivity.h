@@ -24,39 +24,34 @@
 
 #pragma once
 
-#include <QXmppVCardManager.h>
+#include <QtCore/QVariant>
+#include <QtXml/QDomElement>
 
-#include <QmlQXmppVCard.h>
-
-class QmlQXmppVCardManager : public QXmppVCardManager
+class QmlQXmppLastActivity : public QObject
 {
   Q_OBJECT
+  Q_PROPERTY(QString from READ from);
+  Q_PROPERTY(quint64 seconds READ seconds);
+  Q_PROPERTY(QString status READ status);
 
 public:
-  QmlQXmppVCardManager();
-  ~QmlQXmppVCardManager();
+  QmlQXmppLastActivity(const QString &from = QString());
+  QmlQXmppLastActivity(const QmlQXmppLastActivity &other);
+  ~QmlQXmppLastActivity();
 
-  Q_INVOKABLE QString requestVCard(const QString& bareJid = QString());
+  QmlQXmppLastActivity& operator=(const QmlQXmppLastActivity &other);
 
-  Q_INVOKABLE const QmlQXmppVCard& clientVCard() const;
-  Q_INVOKABLE void setClientVCard(const QmlQXmppVCard&);
+  void setFrom(const QString &value);
+  QString from() const;
 
-  Q_INVOKABLE QString requestClientVCard();
-  Q_INVOKABLE bool isClientVCardReceived() const;
+  void setSeconds(quint64 value);
+  quint64 seconds() const;
 
-  bool handleStanza(const QDomElement &element) override;
-
-signals:
-  /// This signal is emitted when the requested vCard is received
-  /// after calling the requestVCard() function.
-  void vCardReceived(QmlQXmppVCard *vcard);
-
-  /// This signal is emitted when the client's vCard is received
-  /// after calling the requestClientVCard() function.
-  void clientVCardReceived();
+  void setStatus(const QString &value);
+  QString status() const;
 
 private:
-  QmlQXmppVCard _clientVCard;
-  bool _isClientVCardReceived;
-  QStringList _customElements;
+  QString _from;
+  quint64 _seconds;
+  QString _status;
 };

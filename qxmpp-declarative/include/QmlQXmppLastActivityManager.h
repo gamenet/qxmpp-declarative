@@ -24,39 +24,26 @@
 
 #pragma once
 
-#include <QXmppVCardManager.h>
+#include <QXmppLastActivityManager.h>
 
-#include <QmlQXmppVCard.h>
+class QmlQXmppLastActivity;
 
-class QmlQXmppVCardManager : public QXmppVCardManager
+class QmlQXmppLastActivityManager : public QXmppLastActivityManager
 {
   Q_OBJECT
-
 public:
-  QmlQXmppVCardManager();
-  ~QmlQXmppVCardManager();
+  QmlQXmppLastActivityManager();
+  ~QmlQXmppLastActivityManager();
 
-  Q_INVOKABLE QString requestVCard(const QString& bareJid = QString());
-
-  Q_INVOKABLE const QmlQXmppVCard& clientVCard() const;
-  Q_INVOKABLE void setClientVCard(const QmlQXmppVCard&);
-
-  Q_INVOKABLE QString requestClientVCard();
-  Q_INVOKABLE bool isClientVCardReceived() const;
-
-  bool handleStanza(const QDomElement &element) override;
+  Q_INVOKABLE QString requestLastActivity(const QString& bareJid = QString());
 
 signals:
-  /// This signal is emitted when the requested vCard is received
-  /// after calling the requestVCard() function.
-  void vCardReceived(QmlQXmppVCard *vcard);
+  void lastActivityUpdated(QmlQXmppLastActivity *lastActivity);
 
-  /// This signal is emitted when the client's vCard is received
-  /// after calling the requestClientVCard() function.
-  void clientVCardReceived();
+private slots:
+  void onLastActivityReceived(const QXmppLastActivityIq& lastActivity);
 
 private:
-  QmlQXmppVCard _clientVCard;
-  bool _isClientVCardReceived;
-  QStringList _customElements;
+  void connectSignals();
+
 };

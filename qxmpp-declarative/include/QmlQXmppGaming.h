@@ -21,42 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 #pragma once
 
-#include <QXmppVCardManager.h>
+#include <QtCore/QObject>
+#include <QXmppGaming.h>
 
-#include <QmlQXmppVCard.h>
-
-class QmlQXmppVCardManager : public QXmppVCardManager
+class QmlQXmppGaming : public QObject
 {
   Q_OBJECT
-
+  Q_PROPERTY(QString from READ from);
+  Q_PROPERTY(QString characterName READ characterName);
+  Q_PROPERTY(QString characterProfile READ characterProfile);
+  Q_PROPERTY(QString name READ name);
+  Q_PROPERTY(QString level READ level);
+  Q_PROPERTY(QString serverAddress READ serverAddress);
+  Q_PROPERTY(QString serverName READ serverName);
+  Q_PROPERTY(QString uri READ uri);
 public:
-  QmlQXmppVCardManager();
-  ~QmlQXmppVCardManager();
+  QmlQXmppGaming(QObject *parent = 0);
+  QmlQXmppGaming(const QString& from, const QXmppGaming& gaming, QObject *parent = 0);
+  virtual ~QmlQXmppGaming();
 
-  Q_INVOKABLE QString requestVCard(const QString& bareJid = QString());
-
-  Q_INVOKABLE const QmlQXmppVCard& clientVCard() const;
-  Q_INVOKABLE void setClientVCard(const QmlQXmppVCard&);
-
-  Q_INVOKABLE QString requestClientVCard();
-  Q_INVOKABLE bool isClientVCardReceived() const;
-
-  bool handleStanza(const QDomElement &element) override;
-
-signals:
-  /// This signal is emitted when the requested vCard is received
-  /// after calling the requestVCard() function.
-  void vCardReceived(QmlQXmppVCard *vcard);
-
-  /// This signal is emitted when the client's vCard is received
-  /// after calling the requestClientVCard() function.
-  void clientVCardReceived();
+  QString from() const;
+  QString characterName() const;
+  QString characterProfile() const;
+  QString name() const;
+  QString level() const;
+  QString serverAddress() const;
+  QString serverName() const;
+  QString uri() const;
 
 private:
-  QmlQXmppVCard _clientVCard;
-  bool _isClientVCardReceived;
-  QStringList _customElements;
+  QXmppGaming _gaming;
+  QString _from;
 };
+

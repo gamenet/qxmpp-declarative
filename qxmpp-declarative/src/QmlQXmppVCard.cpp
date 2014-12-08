@@ -24,67 +24,90 @@
 
 #include <QmlQXmppVCard.h>
 
-QmlQXmppVCard::QmlQXmppVCard(QObject *parent)
-    : QObject(parent)
+QmlQXmppVCard::QmlQXmppVCard(const QString &elementName)
+  : _extraElementName(elementName)
 {
+
+}
+
+QmlQXmppVCard::QmlQXmppVCard(const QmlQXmppVCard &rhs)
+  : _extraElementName(rhs._extraElementName)
+  , _extraData(rhs._extraData)
+{
+
 }
 
 QmlQXmppVCard::~QmlQXmppVCard()
 {
+
 }
 
-QmlQXmppVCard& QmlQXmppVCard::operator=(const QXmppVCardIq &xmppVCard)
+QmlQXmppVCard& QmlQXmppVCard::operator=(const QmlQXmppVCard &rhs)
 {
-  this->_vcard = xmppVCard;
+  if (this == &rhs)
+    return *this;
+
+  this->_extraElementName = rhs._extraElementName;
+  this->_extraData = rhs._extraData;
   return *this;
 }
 
-QString QmlQXmppVCard::from() const
+void QmlQXmppVCard::setExtra(const QVariantMap &map)
 {
-  return _vcard.from();
+  this->_extraData = map;
 }
 
-QDate QmlQXmppVCard::birthday() const
+QVariantMap QmlQXmppVCard::extra() const
 {
-    return _vcard.birthday();
+  return this->_extraData;
 }
 
-QString QmlQXmppVCard::description() const
+void QmlQXmppVCard::setExtraElementName(const QString &elementName)
 {
-    return _vcard.description();
+  this->_extraElementName = elementName;
 }
 
-QString QmlQXmppVCard::email() const
+QString QmlQXmppVCard::extraElementName() const
 {
-    return _vcard.email();
+  return this->_extraElementName;
 }
 
-QString QmlQXmppVCard::firstName() const
+void QmlQXmppVCard::parseElementFromChild(const QDomElement &nodeRecv)
 {
-    return _vcard.firstName();
+  QXmppVCardIq::parseElementFromChild(nodeRecv);
+  QDomElement child = nodeRecv.firstChildElement("vCard")
+                              .firstChildElement();
+
+  while (!child.isNull()) {
+    QString elementName = child.tagName();
+    if (elementName == this->_extraElementName) {
+      QDomElement extraChild = child.firstChildElement();
+      while (!extraChild.isNull()) {
+        QString keyName = extraChild.tagName();
+        QString value = extraChild.text();
+        this->_extraData.insert(keyName, value);
+
+        extraChild = extraChild.nextSiblingElement();
+      }
+    }
+
+    child = child.nextSiblingElement();
+  }
+
 }
 
-QString QmlQXmppVCard::fullName() const
+void QmlQXmppVCard::toXmlElementFromChild(QXmlStreamWriter *writer) const
 {
-    return _vcard.fullName();
-}
+  QXmppVCardIq::toXmlElementFromChild(writer);
 
-QString QmlQXmppVCard::lastName() const
-{
-    return _vcard.lastName();
-}
+  if (!this->_extraElementName.isEmpty()) {
+    writer->writeStartElement(this->_extraElementName);
 
-QString QmlQXmppVCard::middleName() const
-{
-    return _vcard.middleName();
-}
+    QVariantMap::const_iterator it = this->_extraData.constBegin();
+    for (; it != this->_extraData.constEnd(); ++it) {
+      writer->writeTextElement(it.key(), it.value().toString());
+    }
 
-QString QmlQXmppVCard::nickName() const
-{
-    return _vcard.nickName();
-}
-
-QString QmlQXmppVCard::url() const
-{
-    return _vcard.url();
+    writer->writeEndElement();
+  }
 }

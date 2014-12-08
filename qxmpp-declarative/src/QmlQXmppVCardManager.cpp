@@ -22,14 +22,15 @@
  * THE SOFTWARE.
  */
 
-#include <QmlQXmppPlugin_global.h>
-#include <QmlQXmppVCardManager.h>
+#include <QXmppClient.h>
+#include <QXmppConstants.h>
 
-QmlQXmppVCardManager::QmlQXmppVCardManager(QXmppVCardManager *vcardMgr, QObject *parent)
-  : QObject(parent)
-  , _vcardManager(vcardMgr)
+#include <QmlQXmppVCardManager.h>
+#include <QmlQXmppVCard.h>
+
+QmlQXmppVCardManager::QmlQXmppVCardManager()
 {
-  this->connectSignals();
+
 }
 
 QmlQXmppVCardManager::~QmlQXmppVCardManager()
@@ -37,25 +38,76 @@ QmlQXmppVCardManager::~QmlQXmppVCardManager()
 
 }
 
-void QmlQXmppVCardManager::requestVCard(const QString& jid)
+/// This function requests the server for vCard of the specified jid.
+/// Once received the signal vCardReceived() is emitted.
+///
+/// \param jid Jid of the specific entry in the roster
+///
+QString QmlQXmppVCardManager::requestVCard(const QString& jid)
 {
-   Q_ASSERT(_vcardManager);
- 
-   _vcardManager->requestVCard(jid);
- }
-
-void QmlQXmppVCardManager::onVCardReceived(const QXmppVCardIq& vcardIq)
-{
-  QmlQXmppVCard vcardWrapper;
-  vcardWrapper = vcardIq;
-  //QSharedPointer<QmlQXmppVCard> ptr(vcardWrapper);
-  //_requestedVCards.append(ptr);
-  emit vCardReceived(&vcardWrapper);
+  QXmppVCardIq request(jid);
+  if (client()->sendPacket(request)) 
+    return request.id();
+  
+  return QString();
 }
 
-void QmlQXmppVCardManager::connectSignals()
+/// Returns the vCard of the connected client.
+///
+/// \return QXmppVCard
+///
+const QmlQXmppVCard& QmlQXmppVCardManager::clientVCard() const
 {
-  Q_ASSERT(_vcardManager);
+  return this->_clientVCard;
+}
 
-  SIGNAL_CONNECT_CHECK(connect(_vcardManager, SIGNAL(vCardReceived(const QXmppVCardIq&)), this, SLOT(onVCardReceived(const QXmppVCardIq&))));
+/// Sets the vCard of the connected client.
+///
+/// \param clientVCard QXmppVCard
+///
+void QmlQXmppVCardManager::setClientVCard(const QmlQXmppVCard& clientVCard)
+{
+  this->_clientVCard = clientVCard;
+  this->_clientVCard.setTo("");
+  this->_clientVCard.setFrom("");
+  this->_clientVCard.setType(QXmppIq::Set);
+  client()->sendPacket(this->_clientVCard);
+}
+
+/// This function requests the server for vCard of the connected user itself.
+/// Once received the signal clientVCardReceived() is emitted. Received vCard
+/// can be get using clientVCard().
+QString QmlQXmppVCardManager::requestClientVCard()
+{
+  return this->requestVCard();
+}
+
+/// Returns true if vCard of the connected client has been
+/// received else false.
+///
+/// \return bool
+///
+bool QmlQXmppVCardManager::isClientVCardReceived() const
+{
+  return this->_isClientVCardReceived;
+}
+
+bool QmlQXmppVCardManager::handleStanza(const QDomElement &element)
+{
+  if (element.tagName() == "iq" && QXmppVCardIq::isVCard(element)) {
+    QmlQXmppVCard vCardIq;
+    vCardIq.parse(element);
+
+    if (vCardIq.from().isEmpty()) {
+      this->_clientVCard = vCardIq;
+      this->_isClientVCardReceived = true;
+      emit clientVCardReceived();
+    }
+
+    emit this->vCardReceived(&vCardIq);
+    
+    return true;
+  }
+
+  return false;
 }

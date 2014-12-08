@@ -24,41 +24,43 @@
 
 #pragma once
 
-#include <QtDeclarative/QDeclarativeListProperty>
-
+#include <QtCore/QVariant>
+#include <QtXml/QDomElement>
 #include <QXmppVCardIq.h>
 
-class QmlQXmppVCard : public QObject
+class QmlQXmppVCard : public QObject, public QXmppVCardIq
 {
   Q_OBJECT
-  Q_PROPERTY(QString from READ from)
-  Q_PROPERTY(QDate birthday READ birthday);
-  Q_PROPERTY(QString description READ description);
-  Q_PROPERTY(QString email READ email);
-  Q_PROPERTY(QString firstName READ firstName);
-  Q_PROPERTY(QString fullName READ fullName);
-  Q_PROPERTY(QString lastName READ lastName);
-  Q_PROPERTY(QString middleName READ middleName);
-  Q_PROPERTY(QString nickName READ middleName);
-  Q_PROPERTY(QString url READ url);
+  Q_PROPERTY(QString from READ from WRITE setFrom)
+  Q_PROPERTY(QDate birthday READ birthday WRITE setBirthday);
+  Q_PROPERTY(QString description READ description WRITE setDescription);
+  Q_PROPERTY(QString email READ email WRITE setEmail);
+  Q_PROPERTY(QString firstName READ firstName WRITE setFirstName);
+  Q_PROPERTY(QString fullName READ fullName WRITE setFullName);
+  Q_PROPERTY(QString lastName READ lastName WRITE setLastName);
+  Q_PROPERTY(QString middleName READ middleName WRITE setMiddleName);
+  Q_PROPERTY(QString nickName READ nickName WRITE setNickName);
+  Q_PROPERTY(QString url READ url WRITE setUrl);
+  Q_PROPERTY(QVariantMap extra READ extra WRITE setExtra)
 
 public:
-  QmlQXmppVCard(QObject *parent = 0);
+  QmlQXmppVCard(const QString &elementName = QString("EXTRA"));
+  QmlQXmppVCard(const QmlQXmppVCard &p);
   ~QmlQXmppVCard();
 
-  QmlQXmppVCard& operator=(const QXmppVCardIq &xmppVCard);
+  QmlQXmppVCard& operator=(const QmlQXmppVCard &xmppVCard);
 
-  QString from() const;
-  QDate birthday() const;
-  QString description() const;
-  QString email() const;
-  QString firstName() const;
-  QString fullName() const;
-  QString lastName() const;
-  QString middleName() const;
-  QString nickName() const;
-  QString url() const;
+  void setExtra(const QVariantMap &map);
+  QVariantMap extra() const;
+
+  void setExtraElementName(const QString &elementName);
+  QString extraElementName() const;
+
+protected:
+  void parseElementFromChild(const QDomElement&) override;
+  void toXmlElementFromChild(QXmlStreamWriter *writer) const override;
 
 private:
-  QXmppVCardIq _vcard;
+  QString _extraElementName;
+  QVariantMap _extraData;
 };

@@ -25,7 +25,7 @@
 #pragma once
 
 #include <QtCore/QObject>
-
+#include <QtDeclarative/QDeclarativeItem>
 #include <QXmppClient.h>
 
 class QmlQXmppMessage;
@@ -34,30 +34,54 @@ class QmlQXmppConfiguration;
 class QmlQXmppArchiveManager;
 class QmlQXmppRosterManager;
 class QmlQXmppVCardManager;
+class QmlQXmppLastActivityManager;
+class QmlQXmppPEPManager;
 
 class QXmppArchiveManager;
 
-class QmlQXmppClient : public QObject
+class QmlQXmppClient : public QDeclarativeItem
 {
   Q_OBJECT
+  Q_ENUMS(StatusType)
+  Q_ENUMS(Error)
   Q_PROPERTY(QmlQXmppConfiguration *configuration READ configuration CONSTANT)
   Q_PROPERTY(QmlQXmppArchiveManager* archiveManager READ archiveManager CONSTANT)
   Q_PROPERTY(QmlQXmppRosterManager* rosterManager READ rosterManager CONSTANT)
   Q_PROPERTY(QmlQXmppVCardManager* vcardManager READ vcardManager CONSTANT)
-  Q_PROPERTY(QString statusType READ clientStatusType WRITE setClientStatusType NOTIFY statusTypeChanged)
-  Q_PROPERTY(QString statusText READ clientStatusText WRITE setClientStatusText NOTIFY statusTextChanged)
+  Q_PROPERTY(QmlQXmppLastActivityManager* lastActivityManager READ lastActivityManager CONSTANT)
+  Q_PROPERTY(QmlQXmppPEPManager* pepManager READ pepManager CONSTANT)
+
+  Q_PROPERTY(StatusType clientStatusType READ clientStatusType NOTIFY clientStatusTypeChanged)
+  Q_PROPERTY(QString clientStatusText READ clientStatusText NOTIFY clientStatusTextChanged)
 
 public:
-  QmlQXmppClient(QObject *parent = 0);
+  enum StatusType {
+    Online = QXmppPresence::Online,
+    Away,
+    XA,
+    DND,
+    Chat,
+    Invisible 
+  };
+
+  enum Error {
+    NoError = QXmppClient::NoError,            ///< No error.
+    SocketError,        ///< Error due to TCP socket.
+    KeepAliveError,     ///< Error due to no response to a keep alive.
+    XmppStreamError,    ///< Error due to XML stream.
+  };
+
+  explicit QmlQXmppClient(QDeclarativeItem *parent = 0);
   ~QmlQXmppClient();
 
   QmlQXmppConfiguration *configuration();
   QmlQXmppArchiveManager *archiveManager();
   QmlQXmppRosterManager *rosterManager();
   QmlQXmppVCardManager* vcardManager();
-
-  QString clientStatusType();
-  void setClientStatusType(const QString &value);
+  QmlQXmppLastActivityManager* lastActivityManager();
+  QmlQXmppPEPManager *pepManager();
+  
+  StatusType clientStatusType();
 
   QString clientStatusText();
   void setClientStatusText(const QString &value);
@@ -87,36 +111,48 @@ signals:
   void disconnected();
 
   /// This signal is emitted when the XMPP connection encounters any error.
-  /// The QXmppClient::Error parameter specifies the type of error occurred.
+  /// The code parameter specifies the type of error occurred.
   /// It could be due to TCP socket or the xml stream or the stanza.
   /// Depending upon the type of error occurred use the respective get function to
   /// know the error.
-  void error(QXmppClient::Error);
+  void error(int code);
 
+  //  This signal is emitted when "my" message from another resource received (see XEP-280 Message Carbons)
+  void carbonMessageReceived(QmlQXmppMessage* message);
+
+  //  This signal is emitted when new message from another jid is received
   void messageReceived(QmlQXmppMessage* message);
 
-  //  This signal is emitted when client presence type changes.
+  //  This signal is emitted when presence stanza received
   void presenceReceived(QmlQXmppPresence *presence);
 
   //  This signal is emitted when client status type changes.
-  void statusTypeChanged(const QString &type);
+  void clientStatusTypeChanged();
 
   //  This signal is emitted when client status text changes.
-  void statusTextChanged(const QString &text);
+  void clientStatusTextChanged();
+
+  // This signal is emited when stream resume
+  void streamManagementResumed(bool resumed);
 
 public slots:
   //  connect using QXmppConfiguration params
   void connectUsingConfiguration();
-  void connectToServer(const QString &jid, const QString &password);
+  void connectToServer(const QString &jid, const QString &password, const QVariantMap &options = QVariantMap());
   void disconnectFromServer();
-  void sendMessage(const QString& bareJid, const QString& message);
+  void sendMessage(const QString& bareJid, QVariantMap map);
+  void setClientPresence(QVariantMap map);
 
 private slots:
+  void onConnected();
+  void onError(QXmppClient::Error code);
   void onMessageReceived(const QXmppMessage& message);
   void onPresenceReceived(const QXmppPresence &presence);
 
 private:
   void connectSignals();
+  QXmppPresence::AvailableStatusType intToAvailableStatusType(int value);
+  StatusType availableStatusTypeToStatusType(QXmppPresence::AvailableStatusType type);
 
 private:
   QXmppClient _client;
@@ -127,5 +163,7 @@ private:
   QmlQXmppConfiguration *_configurationWrapper;
   QmlQXmppArchiveManager *_archiveManagerWrapper;
   QmlQXmppRosterManager *_rosterManagerWrapper;
-  QmlQXmppVCardManager* _vcardManagerWrapper;
+  QmlQXmppVCardManager *_vcardManagerWrapper;
+  QmlQXmppLastActivityManager *_lastActivityManagerWrapper;
+  QmlQXmppPEPManager *_pepManagerWrapper;
 };
