@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-#include <QtCore/QCoreApplication>
-#include <QtDeclarative/QDeclarative.h>
-#include <QtDeclarative/QDeclarativeEngine>
+#include <QQmlExtensionPlugin>
+
+#include <qqml.h>
 
 #include <QXmppLogger.h>
 
@@ -40,18 +40,13 @@
 
 void QmlQXmppPlugin::registerTypes(const char *uri)
 {
-  qmlRegisterUncreatableType<QmlQXmppPresence>("QXmpp", 1, 0, "QXmppPresence", "Do not create QXmppPresence instances.");
-  qmlRegisterType<QmlQXmppClient>("QXmpp", 1, 0, "QXmppClient");
-  qmlRegisterUncreatableType<QmlQXmppConfiguration>("QXmpp", 1, 0, "QXmppConfiguration", "Do not create QXmppConfiguration instances.");
-  qmlRegisterUncreatableType<QmlQXmppArchiveManager>("QXmpp", 1, 0, "QXmppArchiveManager", "Do not create QXmppArchiveManager instances.");
-  qmlRegisterUncreatableType<QmlQXmppRosterManager>("QXmpp", 1, 0, "QXmppRosterManager", "Do not create QXmppRosterManager instances.");
-  qmlRegisterUncreatableType<QmlQXmppVCardManager>("QXmpp", 1, 0, "QXmppVCardManager", "Do not create QmlQXmppVCardManager instances.");
-  qmlRegisterType<QmlQXmppVCard>("QXmpp", 1, 0, "QXmppVCard");
-  qmlRegisterType<QmlQXmppMessage>("QXmpp", 1, 0, "QXmppMessage");
-  qmlRegisterType<QXmppLogger>("QXmpp", 1, 0, "QXmppLogger");
-}
-
-void QmlQXmppPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
-{
-
+  qmlRegisterUncreatableType<QmlQXmppPresence>(uri, 1, 0, "QXmppPresence", "Do not create QXmppPresence instances.");
+  qmlRegisterType<QmlQXmppClient>(uri, 1, 0, "QXmppClient");
+  qmlRegisterUncreatableType<QmlQXmppConfiguration>(uri, 1, 0, "QXmppConfiguration", "Do not create QXmppConfiguration instances.");
+  qmlRegisterUncreatableType<QmlQXmppArchiveManager>(uri, 1, 0, "QXmppArchiveManager", "Do not create QXmppArchiveManager instances.");
+  qmlRegisterUncreatableType<QmlQXmppRosterManager>(uri, 1, 0, "QXmppRosterManager", "Do not create QXmppRosterManager instances.");
+  qmlRegisterUncreatableType<QmlQXmppVCardManager>(uri, 1, 0, "QXmppVCardManager", "Do not create QmlQXmppVCardManager instances.");
+  qmlRegisterType<QmlQXmppVCard>(uri, 1, 0, "QXmppVCard");
+  qmlRegisterType<QmlQXmppMessage>(uri, 1, 0, "QXmppMessage");
+  qmlRegisterType<QXmppLogger>(uri, 1, 0, "QXmppLogger");
 }
