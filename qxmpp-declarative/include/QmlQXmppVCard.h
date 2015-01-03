@@ -27,11 +27,13 @@
 #include <QtCore/QVariant>
 #include <QtXml/QDomElement>
 #include <QXmppVCardIq.h>
+#include <QByteArray>
+#include <QString>
 
 class QmlQXmppVCard : public QObject, public QXmppVCardIq
 {
   Q_OBJECT
-  Q_PROPERTY(QString from READ from WRITE setFrom)
+  Q_PROPERTY(QString from READ from WRITE setFrom);
   Q_PROPERTY(QDate birthday READ birthday WRITE setBirthday);
   Q_PROPERTY(QString description READ description WRITE setDescription);
   Q_PROPERTY(QString email READ email WRITE setEmail);
@@ -41,7 +43,8 @@ class QmlQXmppVCard : public QObject, public QXmppVCardIq
   Q_PROPERTY(QString middleName READ middleName WRITE setMiddleName);
   Q_PROPERTY(QString nickName READ nickName WRITE setNickName);
   Q_PROPERTY(QString url READ url WRITE setUrl);
-  Q_PROPERTY(QVariantMap extra READ extra WRITE setExtra)
+  Q_PROPERTY(QString photo READ photoToString);
+  Q_PROPERTY(QVariantMap extra READ extra WRITE setExtra);
 
 public:
   QmlQXmppVCard(const QString &elementName = QString("EXTRA"));
@@ -55,6 +58,10 @@ public:
 
   void setExtraElementName(const QString &elementName);
   QString extraElementName() const;
+
+  QString photoToString() const {
+    return QString::fromLatin1(this->photo().toBase64());
+  }
 
 protected:
   void parseElementFromChild(const QDomElement&) override;
