@@ -155,6 +155,7 @@ void QmlQXmppClient::connectToServer(const QString &jid, const QString &password
 
 void QmlQXmppClient::disconnectFromServer()
 {
+ emit this->_client.streamManagementEnabled(false);
  this->_client.disconnectFromServer();
 }
 
