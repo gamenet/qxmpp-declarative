@@ -45,6 +45,8 @@
 QmlQXmppClient::QmlQXmppClient(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
     , _archiveManager(0)
+    , _clientPresence(0)
+    , _configurationWrapper(0)
     , _archiveManagerWrapper(0)
     , _rosterManagerWrapper(0)
     , _vcardManagerWrapper(0)
