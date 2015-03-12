@@ -175,6 +175,8 @@ void QmlQXmppClient::sendMessage(const QString& bareJid, QVariantMap map)
 
   if (map.contains(QString("attentionRequest")))
     msg.setAttentionRequested(map["attentionRequest"].toBool());
+
+  msg.setFrom(this->_client.configuration().jid());
   
   QStringList resources = this->_client.rosterManager().getResources(bareJid);
   if (!resources.isEmpty()) {
@@ -230,8 +232,11 @@ void QmlQXmppClient::onError(QXmppClient::Error code)
 void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
 {
   if (message.hasMessageCarbon()) {
-    QmlQXmppMessage qmlmessage(message.carbonMessage());
-    emit carbonMessageReceived(&qmlmessage);
+    QString myFullJid = this->_client.configuration().jid();
+    if (myFullJid != message.carbonMessage().from()) {
+      QmlQXmppMessage qmlmessage(message.carbonMessage());
+      emit carbonMessageReceived(&qmlmessage);
+    }
     return;
   }
 
