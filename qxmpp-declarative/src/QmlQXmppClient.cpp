@@ -177,17 +177,9 @@ void QmlQXmppClient::sendMessage(const QString& bareJid, QVariantMap map)
     msg.setAttentionRequested(map["attentionRequest"].toBool());
 
   msg.setFrom(this->_client.configuration().jid());
-  
-  QStringList resources = this->_client.rosterManager().getResources(bareJid);
-  if (!resources.isEmpty()) {
-    for (int i = 0; i < resources.size(); ++i) {
-      msg.setTo(bareJid + "/" + resources.at(i));
-      this->_client.sendPacket(msg);
-    }
-  } else {
-    msg.setTo(bareJid);
-    this->_client.sendPacket(msg);
-  }
+
+  msg.setTo(bareJid);
+  this->_client.sendPacket(msg);
 }
 
 void QmlQXmppClient::setClientPresence(QVariantMap map)
