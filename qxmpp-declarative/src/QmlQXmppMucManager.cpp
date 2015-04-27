@@ -69,14 +69,35 @@ bool QmlQXmppMucManager::destroyRoom(const QString& roomJid, const QString& reas
   return room->destroy(reason);
 }
 
-bool QmlQXmppMucManager::join(const QString& roomJid, const QString& nickname, const QString& password)
+bool QmlQXmppMucManager::join(const QString& roomJid, const QString& nickname, const QVariantMap& options)
 {
   if (!this->_rooms.contains(roomJid))
     return false;
 
   QXmppMucRoom* room = this->_rooms[roomJid];
   room->setNickName(nickname);
-  room->setPassword(password);
+  if (options.contains("password"))
+    room->setPassword(options.value("password").toString());
+
+  if (options.contains("history")) {
+    QVariantMap historyConfig = options["history"].toMap();
+    if (historyConfig.contains("maxchars"))
+      room->setHistoryConfig("maxchars", historyConfig.value("maxchars").toString());
+    
+    if (historyConfig.contains("maxstanzas"))
+      room->setHistoryConfig("maxstanzas", historyConfig.value("maxstanzas").toString());
+
+    if (historyConfig.contains("seconds"))
+      room->setHistoryConfig("seconds", historyConfig.value("seconds").toString());
+
+    if (historyConfig.contains("since")) {
+      QVariant v = historyConfig.value("since");
+      QDateTime since = QDateTime::fromMSecsSinceEpoch(historyConfig.value("since").toULongLong());
+      QString value = since.toUTC().toString(Qt::ISODate);
+      room->setHistoryConfig("since", value);
+    }
+  }
+
   return room->join();
 }
 
@@ -141,6 +162,18 @@ bool QmlQXmppMucManager::sendInvitation(const QString& roomJid, const QString &j
     return false;
 
   return this->_rooms[roomJid]->sendInvitation(jid, reason);
+}
+
+bool QmlQXmppMucManager::sendInvitationMediated(const QString& roomJid, const QString &jid, const QString &reason)
+{
+  QXmppMessage message;
+  message.setTo(roomJid);
+  message.setType(QXmppMessage::Normal);
+  message.setMucInvitationJid(jid);
+  message.setMucInvitationReason(reason);
+  message.setMucInvitationDirect(false);
+
+  return this->_client->sendPacket(message);
 }
 
 bool QmlQXmppMucManager::sendMessage(const QString& roomJid, const QString &text)
@@ -249,8 +282,8 @@ void QmlQXmppMucManager::onRoomAdded(QXmppMucRoom *room)
   SIGNAL_CONNECT_CHECK(QObject::connect(room, SIGNAL(participantRemoved(const QString &)),
     this, SLOT(onParticipantRemoved(const QString &))));
 
-  SIGNAL_CONNECT_CHECK(QObject::connect(room, SIGNAL(participantPermissions(const QXmppMucItem&)),
-    this, SLOT(onParticipantPermissions(const QXmppMucItem&))));
+  SIGNAL_CONNECT_CHECK(QObject::connect(room, SIGNAL(participantPermissions(const QString &, const QXmppMucItem&)),
+    this, SLOT(onParticipantPermissions(const QString &, const QXmppMucItem&))));
     
   this->_rooms[room->jid()] = room;
 
@@ -355,7 +388,7 @@ void QmlQXmppMucManager::onPermissionsReceived(const QList<QXmppMucItem> &permis
   emit this->permissionsReceived(room->jid(), result);
 }
 
-void QmlQXmppMucManager::onParticipantPermissions(const QXmppMucItem& permissions)
+void QmlQXmppMucManager::onParticipantPermissions(const QString &jid, const QXmppMucItem& permissions)
 {
   QXmppMucRoom *room = qobject_cast<QXmppMucRoom *>(QObject::sender());
   if (!room)
@@ -365,7 +398,7 @@ void QmlQXmppMucManager::onParticipantPermissions(const QXmppMucItem& permission
   user["jid"] = permissions.jid();
   user["role"] = QXmppMucItem::roleToString(permissions.role());
   user["affiliation"] = QXmppMucItem::affiliationToString(permissions.affiliation());
-  emit this->participantPermissions(room->jid(), user);
+  emit this->participantPermissions(room->jid(), jid, user);
 }
 
 void QmlQXmppMucManager::onParticipantAdded(const QString &jid)

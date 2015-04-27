@@ -57,7 +57,7 @@ public slots:
 
   bool destroyRoom(const QString& roomJid, const QString& reason = QString());
 
-  bool join(const QString& roomJid, const QString& nickname, const QString& password = QString());
+  bool join(const QString& roomJid, const QString& nickname, const QVariantMap& options);
   bool leave(const QString& roomJid, const QString &message = QString());
 
   bool ban(const QString& roomJid, const QString &occupantJid, const QString &reason);
@@ -68,6 +68,7 @@ public slots:
   QString participantFullJid(const QString& roomJid, const QString& occupantJid) const;
 
   bool sendInvitation(const QString& roomJid, const QString &jid, const QString &reason);
+  bool sendInvitationMediated(const QString& roomJid, const QString &jid, const QString &reason);
   bool sendMessage(const QString& roomJid, const QString &text);
 
   QString subject(const QString& roomJid) const;
@@ -117,7 +118,7 @@ signals:
   /// This signal is emitted when a participant leaves the room.
   void participantRemoved(const QString& roomJid, const QString &jid);
 
-  void participantPermissions(const QString& roomJid, const QVariantMap &permissions);
+  void participantPermissions(const QString& roomJid, const QString &jid, const QVariantMap &permissions);
 
 private slots:
   void onRoomAdded(QXmppMucRoom *room);
@@ -133,7 +134,7 @@ private slots:
   void onMessageReceived(const QXmppMessage &message);
   void onPermissionsReceived(const QList<QXmppMucItem> &permissions);
 
-  void onParticipantPermissions(const QXmppMucItem& permissions);
+  void onParticipantPermissions(const QString &jid, const QXmppMucItem& permissions);
 
   /// This signal is emitted when a participant joins the room.
   void onParticipantAdded(const QString &jid);
