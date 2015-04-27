@@ -451,7 +451,7 @@ void QmlQXmppMucManager::initConfigMap()
   this->setShortConfig("muc#roomconfig_membersonly", "membersonly", true, QXmppDataForm::Field::BooleanField);
   this->setShortConfig("muc#roomconfig_moderatedroom", "moderated", true, QXmppDataForm::Field::BooleanField);
   this->setShortConfig("members_by_default", "membersByDefault", true, QXmppDataForm::Field::BooleanField);
-  this->setShortConfig("muc#roomconfig_changesubject", "canChangeSubjecy", true, QXmppDataForm::Field::BooleanField);
+  this->setShortConfig("muc#roomconfig_changesubject", "canChangeSubject", true, QXmppDataForm::Field::BooleanField);
   this->setShortConfig("allow_private_messages", "allowPrivateMessages", true, QXmppDataForm::Field::BooleanField);
   this->setShortConfig("allow_private_messages_from_visitors", "allowPrivateMessagesFromVisitors", QString("anyone"), QXmppDataForm::Field::ListSingleField);
   this->setShortConfig("allow_query_users", "allowQueryUsers", true, QXmppDataForm::Field::BooleanField);
@@ -459,7 +459,7 @@ void QmlQXmppMucManager::initConfigMap()
   this->setShortConfig("muc#roomconfig_allowvisitorstatus", "allowVisitorStatus", true, QXmppDataForm::Field::BooleanField);
   this->setShortConfig("muc#roomconfig_allowvisitornickchange", "allowVisitorNickChange", false, QXmppDataForm::Field::BooleanField);
   this->setShortConfig("muc#roomconfig_allowvoicerequests", "allowVoiceRequests", false, QXmppDataForm::Field::BooleanField);
-  this->setShortConfig("muc#roomconfig_voicerequestmininterval", "voiceRrequestMinInterval", 1800, QXmppDataForm::Field::TextSingleField);
+  this->setShortConfig("muc#roomconfig_voicerequestmininterval", "voiceRequestMinInterval", 1800, QXmppDataForm::Field::TextSingleField);
   this->setShortConfig("muc#roomconfig_captcha_whitelist", "captchaWhitelist", QStringList(), QXmppDataForm::Field::JidMultiField);
 }
 
