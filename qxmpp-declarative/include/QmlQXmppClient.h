@@ -36,6 +36,10 @@ class QmlQXmppRosterManager;
 class QmlQXmppVCardManager;
 class QmlQXmppLastActivityManager;
 class QmlQXmppPEPManager;
+class QmlQXmppMucManager;
+class QmlQXmppDiscoveryManager;
+class QmlQXmppBookmarkManager;
+class QmlQXmppLogger;
 
 class QXmppArchiveManager;
 
@@ -50,6 +54,10 @@ class QmlQXmppClient : public QDeclarativeItem
   Q_PROPERTY(QmlQXmppVCardManager* vcardManager READ vcardManager CONSTANT)
   Q_PROPERTY(QmlQXmppLastActivityManager* lastActivityManager READ lastActivityManager CONSTANT)
   Q_PROPERTY(QmlQXmppPEPManager* pepManager READ pepManager CONSTANT)
+  Q_PROPERTY(QmlQXmppMucManager* mucManager READ mucManager CONSTANT)
+  Q_PROPERTY(QmlQXmppDiscoveryManager* discoveryManager READ discoveryManager CONSTANT)
+  Q_PROPERTY(QmlQXmppBookmarkManager* bookmarkManager READ bookmarkManager CONSTANT)
+  Q_PROPERTY(QmlQXmppLogger* logger READ logger CONSTANT)
 
   Q_PROPERTY(StatusType clientStatusType READ clientStatusType NOTIFY clientStatusTypeChanged)
   Q_PROPERTY(QString clientStatusText READ clientStatusText NOTIFY clientStatusTextChanged)
@@ -80,7 +88,11 @@ public:
   QmlQXmppVCardManager* vcardManager();
   QmlQXmppLastActivityManager* lastActivityManager();
   QmlQXmppPEPManager *pepManager();
-  
+  QmlQXmppMucManager *mucManager();
+  QmlQXmppDiscoveryManager *discoveryManager();
+  QmlQXmppBookmarkManager *bookmarkManager();
+  QmlQXmppLogger *logger();
+
   StatusType clientStatusType();
 
   QString clientStatusText();
@@ -134,7 +146,7 @@ signals:
 
   // This signal is emited when stream resume
   void streamManagementResumed(bool resumed);
-  
+
 public slots:
   //  connect using QXmppConfiguration params
   void connectUsingConfiguration();
@@ -166,4 +178,8 @@ private:
   QmlQXmppVCardManager *_vcardManagerWrapper;
   QmlQXmppLastActivityManager *_lastActivityManagerWrapper;
   QmlQXmppPEPManager *_pepManagerWrapper;
+  QmlQXmppMucManager *_mucManagerWrapper;
+  QmlQXmppDiscoveryManager *_discoveryManagerWrapper;
+  QmlQXmppBookmarkManager *_bookmarkManagerWrapper;
+  QmlQXmppLogger *_logger;
 };

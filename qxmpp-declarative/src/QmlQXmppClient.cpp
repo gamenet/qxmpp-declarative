@@ -31,6 +31,9 @@
 #include <QXmppVCardManager.h>
 #include <QXmppLastActivityManager.h>
 #include <QXmppMessageCarbonsIq.h>
+#include <QXmppMucManager.h>
+#include <QXmppDiscoveryManager.h>
+#include <QXmppBookmarkManager.h>
 
 #include <QmlQXmppPlugin_global.h>
 #include <QmlQXmppClient.h>
@@ -42,6 +45,10 @@
 #include <QmlQXmppVCardManager.h>
 #include <QmlQXmppLastActivityManager.h>
 #include <QmlQXmppPEPManager.h>
+#include <QmlQXmppMucManager.h>
+#include <QmlQXmppDiscoveryManager.h>
+#include <QmlQXmppBookmarkManager.h>
+#include <QmlQXmppLogger.h>
 
 QmlQXmppClient::QmlQXmppClient(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
@@ -53,6 +60,10 @@ QmlQXmppClient::QmlQXmppClient(QDeclarativeItem *parent)
     , _vcardManagerWrapper(0)
     , _lastActivityManagerWrapper(0)
     , _pepManagerWrapper(0)
+    , _mucManagerWrapper(0)
+    , _discoveryManagerWrapper(0)
+    , _bookmarkManagerWrapper(0)
+    , _logger(0)
 {
   connectSignals();
 }
@@ -82,7 +93,6 @@ QmlQXmppArchiveManager *QmlQXmppClient::archiveManager()
   return _archiveManagerWrapper;
 }
 
-//
 QmlQXmppRosterManager *QmlQXmppClient::rosterManager()
 {
   if (!this->_rosterManagerWrapper)
@@ -115,7 +125,6 @@ QmlQXmppLastActivityManager *QmlQXmppClient::lastActivityManager()
   return this->_lastActivityManagerWrapper;
 }
 
-
 QmlQXmppPEPManager *QmlQXmppClient::pepManager()
 {
   if (!this->_pepManagerWrapper)
@@ -124,6 +133,46 @@ QmlQXmppPEPManager *QmlQXmppClient::pepManager()
   return this->_pepManagerWrapper;
 }
 
+QmlQXmppMucManager * QmlQXmppClient::mucManager()
+{
+  if (!this->_mucManagerWrapper) {
+    QXmppMucManager *muc = new QXmppMucManager();
+    this->_mucManagerWrapper = new QmlQXmppMucManager(muc, &this->_client, this);
+    this->_client.addExtension(muc);
+  }
+
+  return this->_mucManagerWrapper;
+}
+
+QmlQXmppDiscoveryManager* QmlQXmppClient::discoveryManager()
+{
+  if (!this->_discoveryManagerWrapper) {
+     QXmppDiscoveryManager *discoveryManager = this->_client.findExtension<QXmppDiscoveryManager>();
+     Q_ASSERT(discoveryManager);
+     this->_discoveryManagerWrapper = new QmlQXmppDiscoveryManager(discoveryManager, this);
+  }
+
+  return this->_discoveryManagerWrapper;
+}
+
+QmlQXmppBookmarkManager * QmlQXmppClient::bookmarkManager()
+{
+  if (!this->_bookmarkManagerWrapper) {
+    QXmppBookmarkManager *bookmark = new QXmppBookmarkManager();
+    this->_bookmarkManagerWrapper = new QmlQXmppBookmarkManager(bookmark, this);
+    this->_client.addExtension(bookmark);
+  }
+
+  return this->_bookmarkManagerWrapper;
+}
+
+QmlQXmppLogger * QmlQXmppClient::logger()
+{
+  if (!this->_logger)
+    this->_logger = new QmlQXmppLogger(&this->_client, this);
+
+  return this->_logger;
+}
 
 QmlQXmppClient::StatusType QmlQXmppClient::clientStatusType()
 {
@@ -225,6 +274,7 @@ void QmlQXmppClient::onMessageReceived(const QXmppMessage& message)
 {
   if (message.hasMessageCarbon()) {
     QString myFullJid = this->_client.configuration().jid();
+
     if (myFullJid != message.carbonMessage().from()) {
       QmlQXmppMessage qmlmessage(message.carbonMessage());
       emit carbonMessageReceived(&qmlmessage);

@@ -41,23 +41,34 @@
 #include <QmlQXmppLastActivityManager.h>
 #include <QmlQXmppPEPManager.h>
 #include <QmlQXmppGaming.h>
+#include <QmlQXmppMucManager.h>
+#include <QmlQXmppDiscoveryManager.h>
+#include <QmlQXmppDiscovery.h>
+#include <QmlQXmppBookmarkManager.h>
+#include <QmlQXmppLogger.h>
 
 void QmlQXmppPlugin::registerTypes(const char *uri)
 {
-  qmlRegisterUncreatableType<QmlQXmppPresence>("QXmpp", 1, 0, "QXmppPresence", "Do not create QXmppPresence instances.");
   qmlRegisterType<QmlQXmppClient>("QXmpp", 1, 0, "QXmppClient");
+  qmlRegisterType<QmlQXmppDiscovery>("QXmpp", 1, 0, "QmlQXmppDiscovery");
+  qmlRegisterType<QmlQXmppVCard>("QXmpp", 1, 0, "QXmppVCard");
+  qmlRegisterType<QmlQXmppMessage>("QXmpp", 1, 0, "QXmppMessage");
+  qmlRegisterType<QmlQXmppLastActivity>("QXmpp", 1, 0, "QmlQXmppLastActivity");
+  qmlRegisterType<QmlQXmppGaming>("QXmpp", 1, 0, "QXmppGaming");
+
+  qmlRegisterUncreatableType<QmlQXmppPresence>("QXmpp", 1, 0, "QXmppPresence", "Do not create QXmppPresence instances.");
   qmlRegisterUncreatableType<QmlQXmppConfiguration>("QXmpp", 1, 0, "QXmppConfiguration", "Do not create QXmppConfiguration instances.");
   qmlRegisterUncreatableType<QmlQXmppArchiveManager>("QXmpp", 1, 0, "QXmppArchiveManager", "Do not create QXmppArchiveManager instances.");
   qmlRegisterUncreatableType<QmlQXmppRosterManager>("QXmpp", 1, 0, "QXmppRosterManager", "Do not create QXmppRosterManager instances.");
   qmlRegisterUncreatableType<QmlQXmppVCardManager>("QXmpp", 1, 0, "QXmppVCardManager", "Do not create QXmppVCardManager instances.");
   qmlRegisterUncreatableType<QmlQXmppLastActivityManager>("QXmpp", 1, 0, "QXmppLastActivityManager", "Do not create QXmppLastActivityManager instances.");
   qmlRegisterUncreatableType<QmlQXmppPEPManager>("QXmpp", 1, 0, "QmlQXmppPEPManager", "Do not create QmlQXmppPEPManager instances.");
+  qmlRegisterUncreatableType<QmlQXmppMucManager>("QXmpp", 1, 0, "QmlQXmppMucManager", "Do not create QmlQXmppMucManager instances.");
+  qmlRegisterUncreatableType<QmlQXmppDiscoveryManager>("QXmpp", 1, 0, "QmlQXmppDiscoveryManager", "Do not create QmlQXmppDiscoveryManager instances.");
+  qmlRegisterUncreatableType<QmlQXmppBookmarkManager>("QXmpp", 1, 0, "QmlQXmppBookmarkManager", "Do not create QmlQXmppBookmarkManager instances.");
+  qmlRegisterUncreatableType<QmlQXmppLogger>("QXmpp", 1, 0, "QmlQXmppLogger", "Do not create QmlQXmppLogger instances.");
 
-  qmlRegisterType<QmlQXmppVCard>("QXmpp", 1, 0, "QXmppVCard");
-  qmlRegisterType<QmlQXmppMessage>("QXmpp", 1, 0, "QXmppMessage");
-  qmlRegisterType<QmlQXmppLastActivity>("QXmpp", 1, 0, "QmlQXmppLastActivity");
   qmlRegisterType<QXmppLogger>("QXmpp", 1, 0, "QXmppLogger");
-  qmlRegisterType<QmlQXmppGaming>("QXmpp", 1, 0, "QXmppGaming");
 }
 
 void QmlQXmppPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
