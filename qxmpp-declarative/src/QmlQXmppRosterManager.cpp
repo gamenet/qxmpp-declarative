@@ -157,8 +157,12 @@ void QmlQXmppRosterManager::connectSignals()
   Q_ASSERT(this->_rosterManager);
 
   SIGNAL_CONNECT_CHECK(connect(this->_rosterManager, SIGNAL(rosterReceived()), this, SIGNAL(rosterReceived())));
-  SIGNAL_CONNECT_CHECK(connect(this->_rosterManager, SIGNAL(presenceChanged(const QString&, const QString&)), this, SIGNAL(presenceChanged(const QString&, const QString&))));
-  SIGNAL_CONNECT_CHECK(connect(this->_rosterManager, SIGNAL(subscriptionReceived(const QString&)), this, SIGNAL(subscriptionReceived(const QString&))));
+  SIGNAL_CONNECT_CHECK(connect(this->_rosterManager, SIGNAL(presenceChanged(const QString&, const QString&)), 
+    this, SIGNAL(presenceChanged(const QString&, const QString&))));
+
+  SIGNAL_CONNECT_CHECK(connect(this->_rosterManager, SIGNAL(subscriptionReceived(const QString&, const QString&)), 
+    this, SIGNAL(subscriptionReceived(const QString&, const QString&))));
+
   SIGNAL_CONNECT_CHECK(connect(this->_rosterManager, SIGNAL(itemAdded(const QString&)), this, SIGNAL(itemAdded(const QString&))));
   SIGNAL_CONNECT_CHECK(connect(this->_rosterManager, SIGNAL(itemChanged(const QString&)), this, SIGNAL(itemChanged(const QString&))));
   SIGNAL_CONNECT_CHECK(connect(this->_rosterManager, SIGNAL(itemRemoved(const QString&)), this, SIGNAL(itemRemoved(const QString&))));
