@@ -89,7 +89,7 @@ signals:
   ///
   /// \note If you set QXmppConfiguration::autoAcceptSubscriptions() to true, this
   /// signal will not be emitted.
-  void subscriptionReceived(const QString& bareJid);
+  void subscriptionReceived(const QString& bareJid, const QString& reason);
 
   /// This signal is emitted when the roster entry of a particular bareJid is
   /// added as a result of roster push.
