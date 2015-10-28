@@ -23,8 +23,6 @@
  */
 
 #include <QtCore/QCoreApplication>
-#include <QtDeclarative/QDeclarative.h>
-#include <QtDeclarative/QDeclarativeEngine>
 
 #include <QXmppLogger.h>
 
@@ -71,7 +69,7 @@ void QmlQXmppPlugin::registerTypes(const char *uri)
   qmlRegisterType<QXmppLogger>("QXmpp", 1, 0, "QXmppLogger");
 }
 
-void QmlQXmppPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+void QmlQXmppPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
 
 }

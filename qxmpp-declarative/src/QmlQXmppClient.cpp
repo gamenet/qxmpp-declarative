@@ -22,8 +22,6 @@
  * THE SOFTWARE.
  */
 
-#include <QtDeclarative/QDeclarativeEngine>
-
 #include <QXmppUtils.h>
 #include <QXmppMessage.h>
 #include <QXmppPresence.h>
@@ -50,8 +48,8 @@
 #include <QmlQXmppBookmarkManager.h>
 #include <QmlQXmppLogger.h>
 
-QmlQXmppClient::QmlQXmppClient(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+QmlQXmppClient::QmlQXmppClient(QQuickItem *parent)
+  : QQuickItem(parent)
     , _archiveManager(0)
     , _clientPresence(0)
     , _configurationWrapper(0)
