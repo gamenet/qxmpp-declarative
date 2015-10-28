@@ -25,7 +25,7 @@
 #pragma once
 
 #include <QtCore/QObject>
-#include <QtDeclarative/QDeclarativeItem>
+#include <QtQuick/QQuickItem>
 #include <QXmppClient.h>
 
 class QmlQXmppMessage;
@@ -43,7 +43,7 @@ class QmlQXmppLogger;
 
 class QXmppArchiveManager;
 
-class QmlQXmppClient : public QDeclarativeItem
+class QmlQXmppClient : public QQuickItem
 {
   Q_OBJECT
   Q_ENUMS(StatusType)
@@ -79,7 +79,7 @@ public:
     XmppStreamError,    ///< Error due to XML stream.
   };
 
-  explicit QmlQXmppClient(QDeclarativeItem *parent = 0);
+  explicit QmlQXmppClient(QQuickItem *parent = 0);
   ~QmlQXmppClient();
 
   QmlQXmppConfiguration *configuration();
