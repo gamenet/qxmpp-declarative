@@ -42,6 +42,7 @@ class QmlQXmppBookmarkManager;
 class QmlQXmppLogger;
 
 class QXmppArchiveManager;
+class QmlQXmppUserBlacklistManager;
 
 class QmlQXmppClient : public QQuickItem
 {
@@ -58,6 +59,7 @@ class QmlQXmppClient : public QQuickItem
   Q_PROPERTY(QmlQXmppDiscoveryManager* discoveryManager READ discoveryManager CONSTANT)
   Q_PROPERTY(QmlQXmppBookmarkManager* bookmarkManager READ bookmarkManager CONSTANT)
   Q_PROPERTY(QmlQXmppLogger* logger READ logger CONSTANT)
+  Q_PROPERTY(QmlQXmppUserBlacklistManager* blacklistManager READ blacklistManager CONSTANT)
 
   Q_PROPERTY(StatusType clientStatusType READ clientStatusType NOTIFY clientStatusTypeChanged)
   Q_PROPERTY(QString clientStatusText READ clientStatusText NOTIFY clientStatusTextChanged)
@@ -92,6 +94,8 @@ public:
   QmlQXmppDiscoveryManager *discoveryManager();
   QmlQXmppBookmarkManager *bookmarkManager();
   QmlQXmppLogger *logger();
+
+  QmlQXmppUserBlacklistManager *blacklistManager();
 
   StatusType clientStatusType();
 
@@ -182,4 +186,5 @@ private:
   QmlQXmppDiscoveryManager *_discoveryManagerWrapper;
   QmlQXmppBookmarkManager *_bookmarkManagerWrapper;
   QmlQXmppLogger *_logger;
+  QmlQXmppUserBlacklistManager* _blackListManager;
 };
