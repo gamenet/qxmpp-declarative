@@ -203,6 +203,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_QmlQXmppLogger.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="src\QmlQXmppUserBlacklistManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_QmlQXmppUserBlacklistManager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_QmlQXmppUserBlacklistManager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="qxmpp-declarative.rc" />
@@ -271,6 +280,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="include\QmlQXmppLogger.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="include\QmlQXmppUserBlacklistManager.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

@@ -44,6 +44,7 @@
 #include <QmlQXmppDiscovery.h>
 #include <QmlQXmppBookmarkManager.h>
 #include <QmlQXmppLogger.h>
+#include <QmlQXmppUserBlacklistManager.h>
 
 void QmlQXmppPlugin::registerTypes(const char *uri)
 {
@@ -65,6 +66,7 @@ void QmlQXmppPlugin::registerTypes(const char *uri)
   qmlRegisterUncreatableType<QmlQXmppDiscoveryManager>("QXmpp", 1, 0, "QmlQXmppDiscoveryManager", "Do not create QmlQXmppDiscoveryManager instances.");
   qmlRegisterUncreatableType<QmlQXmppBookmarkManager>("QXmpp", 1, 0, "QmlQXmppBookmarkManager", "Do not create QmlQXmppBookmarkManager instances.");
   qmlRegisterUncreatableType<QmlQXmppLogger>("QXmpp", 1, 0, "QmlQXmppLogger", "Do not create QmlQXmppLogger instances.");
+  qmlRegisterUncreatableType<QmlQXmppUserBlacklistManager>("QXmpp", 1, 0, "QmlQXmppUserBlacklistManager", "Do not create QmlQXmppUserBlacklistManager instances.");
 
   qmlRegisterType<QXmppLogger>("QXmpp", 1, 0, "QXmppLogger");
 }

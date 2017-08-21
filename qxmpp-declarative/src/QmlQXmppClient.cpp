@@ -32,6 +32,7 @@
 #include <QXmppMucManager.h>
 #include <QXmppDiscoveryManager.h>
 #include <QXmppBookmarkManager.h>
+#include <QxmppUserBlacklistManager.h>
 
 #include <QmlQXmppPlugin_global.h>
 #include <QmlQXmppClient.h>
@@ -47,21 +48,23 @@
 #include <QmlQXmppDiscoveryManager.h>
 #include <QmlQXmppBookmarkManager.h>
 #include <QmlQXmppLogger.h>
+#include <QmlQXmppUserBlacklistManager.h>
 
 QmlQXmppClient::QmlQXmppClient(QQuickItem *parent)
   : QQuickItem(parent)
-    , _archiveManager(0)
-    , _clientPresence(0)
-    , _configurationWrapper(0)
-    , _archiveManagerWrapper(0)
-    , _rosterManagerWrapper(0)
-    , _vcardManagerWrapper(0)
-    , _lastActivityManagerWrapper(0)
-    , _pepManagerWrapper(0)
-    , _mucManagerWrapper(0)
-    , _discoveryManagerWrapper(0)
-    , _bookmarkManagerWrapper(0)
-    , _logger(0)
+  , _archiveManager(0)
+  , _clientPresence(0)
+  , _configurationWrapper(0)
+  , _archiveManagerWrapper(0)
+  , _rosterManagerWrapper(0)
+  , _vcardManagerWrapper(0)
+  , _lastActivityManagerWrapper(0)
+  , _pepManagerWrapper(0)
+  , _mucManagerWrapper(0)
+  , _discoveryManagerWrapper(0)
+  , _bookmarkManagerWrapper(0)
+  , _logger(0)
+  , _blackListManager(0)
 {
   connectSignals();
 }
@@ -170,6 +173,18 @@ QmlQXmppLogger * QmlQXmppClient::logger()
     this->_logger = new QmlQXmppLogger(&this->_client, this);
 
   return this->_logger;
+}
+
+
+QmlQXmppUserBlacklistManager* QmlQXmppClient::blacklistManager()
+{
+  if (!this->_blackListManager) {
+    QXmppUserBlacklistManager *discoveryManager = this->_client.findExtension<QXmppUserBlacklistManager>();
+    Q_ASSERT(discoveryManager);
+    this->_blackListManager = new QmlQXmppUserBlacklistManager(discoveryManager, this);
+  }
+
+  return this->_blackListManager;
 }
 
 QmlQXmppClient::StatusType QmlQXmppClient::clientStatusType()
