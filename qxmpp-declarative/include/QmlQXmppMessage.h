@@ -35,6 +35,7 @@ class QmlQXmppMessage : public QObject
     Q_ENUMS(State)
     Q_PROPERTY(QString body READ body)
     Q_PROPERTY(bool isAttentionRequested READ isAttentionRequested);
+    Q_PROPERTY(bool isReplaceMessage READ isReplaceMessage);
     Q_PROPERTY(bool isReceiptRequested READ isReceiptRequested);
     Q_PROPERTY(QString mucInvitationJid READ mucInvitationJid);
     Q_PROPERTY(QString mucInvitationPassword READ mucInvitationPassword);
@@ -81,6 +82,7 @@ public:
     QString body() const;
     bool isAttentionRequested() const;
     bool isReceiptRequested() const;
+    bool isReplaceMessage() const;
     QString mucInvitationJid() const;
     QString mucInvitationPassword() const;
     QString mucInvitationReason() const;

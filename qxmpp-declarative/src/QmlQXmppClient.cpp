@@ -238,10 +238,19 @@ void QmlQXmppClient::sendMessage(const QString& bareJid, QVariantMap map)
   if (map.contains(QString("attentionRequest")))
     msg.setAttentionRequested(map["attentionRequest"].toBool());
 
+  if (map.contains(QString("replaceId")))
+    msg.setReplace(map[QString("replaceId")].toString());
+
+  // In case we generate message id somewhere else
+  if (map.contains(QString("messageId")))
+    msg.setId(map[QString("messageId")].toString());
+
   msg.setFrom(this->_client.configuration().jid());
 
   msg.setTo(bareJid);
   this->_client.sendPacket(msg);
+
+  return;
 }
 
 void QmlQXmppClient::setClientPresence(QVariantMap map)

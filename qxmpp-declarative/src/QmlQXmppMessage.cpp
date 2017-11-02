@@ -59,6 +59,11 @@ bool QmlQXmppMessage::isReceiptRequested() const
     return this->_message.isReceiptRequested();
 }
 
+bool QmlQXmppMessage::isReplaceMessage() const
+{
+  return this->_message.isReplace();
+}
+
 QString QmlQXmppMessage::mucInvitationJid() const
 {
     return this->_message.mucInvitationJid();
