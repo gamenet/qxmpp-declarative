@@ -134,6 +134,11 @@ QString QmlQXmppMessage::lang() const
     return this->_message.lang();
 }
 
+QString QmlQXmppMessage::replaceId() const
+{
+  return this->_message.replaceId();
+}
+
 QXmppStanza::Error QmlQXmppMessage::error() const
 {
     return this->_message.error();
