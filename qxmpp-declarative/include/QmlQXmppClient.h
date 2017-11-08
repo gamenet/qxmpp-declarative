@@ -156,7 +156,7 @@ public slots:
   void connectUsingConfiguration();
   void connectToServer(const QString &jid, const QString &password, const QVariantMap &options = QVariantMap());
   void disconnectFromServer();
-  void sendMessage(const QString& bareJid, QVariantMap map);
+  QString sendMessage(const QString& bareJid, QVariantMap map);
   void setClientPresence(QVariantMap map);
 
 private slots:

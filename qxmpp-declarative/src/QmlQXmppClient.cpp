@@ -222,7 +222,7 @@ void QmlQXmppClient::disconnectFromServer()
  this->_client.disconnectFromServer();
 }
 
-void QmlQXmppClient::sendMessage(const QString& bareJid, QVariantMap map)
+QString QmlQXmppClient::sendMessage(const QString& bareJid, QVariantMap map)
 {
   QXmppMessage msg;
 
@@ -241,16 +241,12 @@ void QmlQXmppClient::sendMessage(const QString& bareJid, QVariantMap map)
   if (map.contains(QString("replaceId")))
     msg.setReplace(map[QString("replaceId")].toString());
 
-  // In case we generate message id somewhere else
-  if (map.contains(QString("messageId")))
-    msg.setId(map[QString("messageId")].toString());
-
   msg.setFrom(this->_client.configuration().jid());
 
   msg.setTo(bareJid);
   this->_client.sendPacket(msg);
 
-  return;
+  return msg.id();
 }
 
 void QmlQXmppClient::setClientPresence(QVariantMap map)
