@@ -242,8 +242,11 @@ QString QmlQXmppClient::sendMessage(const QString& bareJid, QVariantMap map)
     msg.setReplace(map[QString("replaceId")].toString());
 
   msg.setFrom(this->_client.configuration().jid());
-
   msg.setTo(bareJid);
+
+  QString prng = msg.generateId();
+  msg.setId(prng);
+
   this->_client.sendPacket(msg);
 
   return msg.id();
