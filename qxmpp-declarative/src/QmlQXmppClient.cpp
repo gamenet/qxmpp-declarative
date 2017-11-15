@@ -244,9 +244,8 @@ QString QmlQXmppClient::sendMessage(const QString& bareJid, QVariantMap map)
   msg.setFrom(this->_client.configuration().jid());
   msg.setTo(bareJid);
 
-  QString prng = msg.generateId();
-  msg.setId(prng);
-
+  msg.generateId();
+  
   this->_client.sendPacket(msg);
 
   return msg.id();
