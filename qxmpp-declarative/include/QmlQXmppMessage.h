@@ -35,6 +35,7 @@ class QmlQXmppMessage : public QObject
     Q_ENUMS(State)
     Q_PROPERTY(QString body READ body)
     Q_PROPERTY(bool isAttentionRequested READ isAttentionRequested);
+    Q_PROPERTY(bool isReplaceMessage READ isReplaceMessage);
     Q_PROPERTY(bool isReceiptRequested READ isReceiptRequested);
     Q_PROPERTY(QString mucInvitationJid READ mucInvitationJid);
     Q_PROPERTY(QString mucInvitationPassword READ mucInvitationPassword);
@@ -44,6 +45,7 @@ class QmlQXmppMessage : public QObject
     Q_PROPERTY(QString subject READ subject);
     Q_PROPERTY(QString thread READ thread);
     Q_PROPERTY(QString xhtml READ xhtml);
+    Q_PROPERTY(QString replaceId READ replaceId);
     Q_PROPERTY(QmlQXmppMessage::State state READ state);
     Q_PROPERTY(QmlQXmppMessage::Type type READ type);
 
@@ -81,6 +83,7 @@ public:
     QString body() const;
     bool isAttentionRequested() const;
     bool isReceiptRequested() const;
+    bool isReplaceMessage() const;
     QString mucInvitationJid() const;
     QString mucInvitationPassword() const;
     QString mucInvitationReason() const;
@@ -95,6 +98,8 @@ public:
     QString from() const;
     QString id() const;
     QString lang() const;
+    QString replaceId() const;
+
     QXmppStanza::Error error() const;
 
     static QXmppMessage::Type parseMessageType(int type);

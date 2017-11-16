@@ -59,6 +59,11 @@ bool QmlQXmppMessage::isReceiptRequested() const
     return this->_message.isReceiptRequested();
 }
 
+bool QmlQXmppMessage::isReplaceMessage() const
+{
+  return this->_message.isReplace();
+}
+
 QString QmlQXmppMessage::mucInvitationJid() const
 {
     return this->_message.mucInvitationJid();
@@ -127,6 +132,11 @@ QString QmlQXmppMessage::id() const
 QString QmlQXmppMessage::lang() const
 {
     return this->_message.lang();
+}
+
+QString QmlQXmppMessage::replaceId() const
+{
+  return this->_message.replaceId();
 }
 
 QXmppStanza::Error QmlQXmppMessage::error() const
